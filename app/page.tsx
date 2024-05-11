@@ -14,18 +14,6 @@ export const metadata: Metadata = {
 export default async function Home() {
   const courses = await getCoursesData();
 
-  if (courses == null || courses.length === 0) {
-    return (
-      <Image
-        src="/loading-animation.gif"
-        width={100}
-        height={100}
-        alt="Загрузка"
-        className="mx-auto m-10"
-      />
-    );
-  }
-
   return (
     <div className="max-w-[1440px] mx-auto ">
       <div className="flex flex-row justify-between gap-x-5">
