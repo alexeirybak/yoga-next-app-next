@@ -2,18 +2,30 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { LoginReg } from "@/app/login/LoginReg";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { Login } from "@/app/components/login/SignIn";
+import { Register } from "../register/SignUp";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
 import styles from "./Header.module.css";
+import { setUser } from "@/app/store/slices/userSlice";
 
 export const Header = () => {
-  const [showLoginRegForm, setShowLoginRegForm] = useState(false);
+  const [showLoginForm, setShowLoginForm] = useState(false);
+  const [showRegisterForm, setShowRegisterForm] = useState(false);
   const user = useSelector((state: RootState) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const parsedUserData = JSON.parse(userData);
+      dispatch(setUser(parsedUserData));
+    }
+  }, [dispatch]);
 
   const handleLoginClick = () => {
-    setShowLoginRegForm(true);
+    setShowLoginForm(true);
   };
 
   return (
@@ -32,10 +44,23 @@ export const Header = () => {
       >
         {user.email ? user.email : "Войти"}
       </button>
-      {showLoginRegForm && (
+      {showLoginForm && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
-            <LoginReg setShowLoginRegForm={setShowLoginRegForm}/>
+            <Login
+              setShowLoginForm={setShowLoginForm}
+              setShowRegisterForm={setShowRegisterForm}
+            />
+          </div>
+        </div>
+      )}
+      {showRegisterForm && (
+        <div className={styles.modalOverlay}>
+          <div className={styles.modalContent}>
+            <Register
+              setShowRegisterForm={setShowRegisterForm}
+              setShowLoginForm={setShowLoginForm}
+            />
           </div>
         </div>
       )}

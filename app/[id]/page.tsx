@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { Metadata } from "next";
+import { Login } from "../components/login/SignIn";
+import { Register } from "../components/register/SignUp";
 import { getCoursesDataById } from "../services/Api/getCoursesData";
 import styles from "./CourseDescription.module.css";
 
