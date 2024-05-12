@@ -13,7 +13,6 @@ type CardProps = {
 };
 
 const Card: React.FC<CardProps> = ({ cardData }) => {
-  console.log(cardData)
   return (
     <div
       className={`flex flex-col h-[500px] relative bg-white rounded-3xl ${styles.card}`}

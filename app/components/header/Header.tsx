@@ -2,15 +2,18 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { Login } from "@/app/login/Login";
+import { LoginReg } from "@/app/login/LoginReg";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/app/store";
 import styles from "./Header.module.css";
 
 export const Header = () => {
-  const [showLogin, setShowLogin] = useState(false);
+  const [showLoginRegForm, setShowLoginRegForm] = useState(false);
+  const user = useSelector((state: RootState) => state.user);
 
   const handleLoginClick = () => {
-    setShowLogin(true);
+    setShowLoginRegForm(true);
   };
 
   return (
@@ -24,15 +27,15 @@ export const Header = () => {
         </p>
       </div>
       <button
-        className="flex items-center justify-center w-32 h-14 p-4 rounded-full bg-custom-lime leading-110 text-center text-lg"
+        className="flex items-center justify-center min-w-32 h-14 p-4 rounded-full bg-custom-lime leading-110 text-center text-lg"
         onClick={handleLoginClick}
       >
-        Войти
+        {user.email ? user.email : "Войти"}
       </button>
-      {showLogin && (
+      {showLoginRegForm && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
-            <Login />
+            <LoginReg setShowLoginRegForm={setShowLoginRegForm}/>
           </div>
         </div>
       )}

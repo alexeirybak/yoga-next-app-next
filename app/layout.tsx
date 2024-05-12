@@ -1,17 +1,17 @@
+"use client"
+
 import type { Metadata } from "next";
 import { Roboto } from "next/font/google";
 import { Header } from "./components/header/Header";
+import { Provider } from "react-redux";
+import { store } from "./store";
+import "./firebase";
 import "./globals.css";
 
 const roboto = Roboto({
   subsets: ["latin"],
-  weight: ["400", "500", "700"] 
+  weight: ["400", "500", "700"],
 });
-
-export const metadata: Metadata = {
-  title: "Фитнес",
-  description: "Как заняться спортом и улучшить качество своей жизни",
-};
 
 export default function RootLayout({
   children,
@@ -21,8 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <Header />
-        <main>{children}</main>
+        <Provider store={store}>
+          <Header />
+          <main>{children}</main>
+        </Provider>
       </body>
     </html>
   );

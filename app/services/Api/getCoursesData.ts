@@ -1,6 +1,6 @@
 export async function getCoursesData() {
   const response = await fetch(
-    "https://fitness-next-default-rtdb.europe-west1.firebasedatabase.app/courses.json",
+    "https://fitness-54b16-default-rtdb.europe-west1.firebasedatabase.app/courses.json",
     {
       next: {
         revalidate: 60,
@@ -15,7 +15,7 @@ export async function getCoursesData() {
 
 export async function getCoursesDataById(id: any) {
   const response = await fetch(
-    `https://fitness-next-default-rtdb.europe-west1.firebasedatabase.app/courses/${id}.json`,
+    `https://fitness-54b16-default-rtdb.europe-west1.firebasedatabase.app/courses/${id}.json`,
     {
       next: {
         revalidate: 60,
