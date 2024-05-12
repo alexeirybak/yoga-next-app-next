@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { Metadata } from "next";
-import { Login } from "../components/login/SignIn";
-import { Register } from "../components/register/SignUp";
+import { EnterButtonFromCourses } from "../components/enterButtonFromCourses/EnterFromCourses";
 import { getCoursesDataById } from "../services/Api/getCoursesData";
 import styles from "./CourseDescription.module.css";
 
@@ -96,7 +95,7 @@ export default async function CourseDescription({ params: { id } }: Props) {
         ></div>
         <div className="relative p-10 rounded-[30px] flex flex-row justify-between">
           <div className="max-w-[437px] flex flex-col justify-between gap-y-[30px]">
-            <div className="">
+            <div>
               <div className="text-5xl font-bold mb-7">
                 Начните путь к новому телу
               </div>
@@ -106,10 +105,7 @@ export default async function CourseDescription({ params: { id } }: Props) {
                 ))}
               </ul>
             </div>
-
-            <button className="bg-custom-lime h-14 rounded-[46px] flex items-center justify-center leading-110 text-lg">
-              Войдите, чтобы добавить курс
-            </button>
+            <EnterButtonFromCourses />
           </div>
           <Image
             src="/man.png"

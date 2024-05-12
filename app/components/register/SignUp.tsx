@@ -7,25 +7,20 @@ import { setUser } from "../../store/slices/userSlice";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 type RegisterProps = {
-  setShowRegisterForm: (value: boolean) => void;
-  setShowLoginForm: (value: boolean) => void;
+  handleClose: () => void;
+  handleLoginClick: () => void;
 };
 
-export const Register = ({
-  setShowRegisterForm,
-  setShowLoginForm,
-}: RegisterProps) => {
+export const Register: React.FC<RegisterProps> = ({
+  handleClose,
+  handleLoginClick,
+}) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [repeatPassword, setRepeatPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const dispatch = useDispatch();
   const auth = getAuth();
-
-  const closerAllForms = () => {
-    setShowRegisterForm(false);
-    setShowLoginForm(false);
-  };
 
   const createUser = async () => {
     try {
@@ -58,7 +53,7 @@ export const Register = ({
           token: idToken,
         })
       );
-      closerAllForms();
+      handleClose();
     } catch (error) {
       const typedError = error as Error;
       setError(typedError.message);
@@ -67,10 +62,7 @@ export const Register = ({
 
   return (
     <div className="relative">
-      <button
-        className="text-2xl w-5 absolute right-0"
-        onClick={closerAllForms}
-      >
+      <button className="text-2xl w-5 absolute right-0" onClick={handleClose}>
         &#10060;
       </button>
       <Image
@@ -113,7 +105,7 @@ export const Register = ({
           Зарегистрироваться
         </button>
         <button
-          onClick={() => setShowRegisterForm(false)}
+          onClick={handleLoginClick}
           className="w-full rounded-[46px] h-[52px] text-lg border-[1px] border-black leading-110 hover:bg-[#f7f7f7] active:bg-[#e9eced] transition-colors duration-300 ease-in-out"
         >
           Войти

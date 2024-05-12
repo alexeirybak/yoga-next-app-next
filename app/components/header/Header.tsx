@@ -4,17 +4,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { Login } from "@/app/components/login/SignIn";
 import { Register } from "../register/SignUp";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
 import styles from "./Header.module.css";
 import { setUser } from "@/app/store/slices/userSlice";
+import {
+  openLogin,
+  closeLogin,
+  openRegister,
+  closeRegister,
+} from "@/app/store/slices/formSlice";
 
-export const Header = () => {
-  const [showLoginForm, setShowLoginForm] = useState(false);
-  const [showRegisterForm, setShowRegisterForm] = useState(false);
-  const user = useSelector((state: RootState) => state.user);
+export const Header: React.FC = () => {
   const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
+  const { isLoginOpen, isRegisterOpen } = useSelector(
+    (state: RootState) => state.form
+  );
 
   useEffect(() => {
     const userData = localStorage.getItem("user");
@@ -25,7 +32,19 @@ export const Header = () => {
   }, [dispatch]);
 
   const handleLoginClick = () => {
-    setShowLoginForm(true);
+    dispatch(openLogin());
+  };
+
+  const handleCloseLogin = () => {
+    dispatch(closeLogin());
+  };
+
+  const handleRegisterClick = () => {
+    dispatch(openRegister());
+  };
+
+  const handleCloseRegister = () => {
+    dispatch(closeRegister());
   };
 
   return (
@@ -38,28 +57,32 @@ export const Header = () => {
           Онлайн-тренировки для занятий дома
         </p>
       </div>
-      <button
-        className="flex items-center justify-center min-w-32 h-14 p-4 rounded-full bg-custom-lime leading-110 text-center text-lg"
-        onClick={handleLoginClick}
-      >
-        {user.email ? user.email : "Войти"}
-      </button>
-      {showLoginForm && (
+      <div>
+        <button
+          className="flex items-center justify-center min-w-32 h-14 p-4 rounded-full bg-custom-lime leading-110 text-center text-lg"
+          onClick={handleLoginClick}
+        >
+          {user.email ? user.email : "Войти"}
+        </button>
+      </div>
+
+      {isLoginOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
             <Login
-              setShowLoginForm={setShowLoginForm}
-              setShowRegisterForm={setShowRegisterForm}
+              handleClose={handleCloseLogin}
+              handleRegisterClick={handleRegisterClick}
             />
           </div>
         </div>
       )}
-      {showRegisterForm && (
+
+      {isRegisterOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.modalContent}>
             <Register
-              setShowRegisterForm={setShowRegisterForm}
-              setShowLoginForm={setShowLoginForm}
+              handleClose={handleCloseRegister}
+              handleLoginClick={handleLoginClick}
             />
           </div>
         </div>
