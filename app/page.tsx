@@ -3,7 +3,7 @@ import Image from "next/image";
 import Card from "./components/card/Card";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import { Metadata } from "next";
-import { getCoursesData } from "./services/Api/getCoursesData";
+import { getCoursesData } from "./Api/getCoursesData";
 import styles from "./Home.module.css";
 
 export const metadata: Metadata = {

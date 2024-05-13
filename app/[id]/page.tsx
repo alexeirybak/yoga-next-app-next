@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Metadata } from "next";
 import { EnterButtonFromCourses } from "../components/enterButtonFromCourses/EnterFromCourses";
-import { getCoursesDataById } from "../services/Api/getCoursesData";
+import { getCoursesDataById } from "../Api/getCoursesData";
 import styles from "./CourseDescription.module.css";
 
 type Props = {
@@ -48,7 +48,7 @@ export default async function CourseDescription({ params: { id } }: Props) {
   return (
     <div>
       <h1
-        className={`max-w-[1440px] h-[310px] mx-auto pl-[40px] pt-[40px] mb-[60px] rounded-3xl text-6xl text-white ${styles.bgTitle} }`}
+        className={`max-w-[1440px] h-[310px] mx-auto pl-[40px] pt-[40px] mb-[60px] rounded-3xl text-6xl text-white ${styles.bgTitle}`}
         style={{ backgroundImage: `url(${courseData.image}-large.jpg)` }}
       >
         {courseData.name}

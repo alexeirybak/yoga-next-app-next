@@ -4,7 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Login } from "@/app/components/login/SignIn";
 import { Register } from "../register/SignUp";
-import { useEffect } from "react";
+import { TopMenu } from "../menu/Menu";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
 import styles from "./Header.module.css";
@@ -22,6 +23,7 @@ export const Header: React.FC = () => {
   const { isLoginOpen, isRegisterOpen } = useSelector(
     (state: RootState) => state.form
   );
+  const [isOpenMenu, setIsOpenMenu] = useState(false);
 
   useEffect(() => {
     const userData = localStorage.getItem("user");
@@ -47,8 +49,12 @@ export const Header: React.FC = () => {
     dispatch(closeRegister());
   };
 
+  const handleMenuClick = () => {
+    setIsOpenMenu(!isOpenMenu);
+  };
+
   return (
-    <header className="flex flex-row gap-y-5 justify-between px-[140px] mb-[60px] mt-12 mx-auto">
+    <header className="flex flex-row gap-y-5 justify-between px-[140px] mb-[60px] pt-12 mx-auto">
       <div className="flex flex-col gap-y-5">
         <Link href={`/`}>
           <Image src="/logo.svg" alt="logo" width={220} height={35} />
@@ -57,13 +63,53 @@ export const Header: React.FC = () => {
           Онлайн-тренировки для занятий дома
         </p>
       </div>
-      <div>
-        <button
-          className="flex items-center justify-center min-w-32 h-14 p-4 rounded-full bg-custom-lime leading-110 text-center text-lg"
-          onClick={handleLoginClick}
-        >
-          {user.email ? user.email : "Войти"}
-        </button>
+      <div
+        className={`flex flex-row justify-center items-center min-w-32 h-14 rounded-full p-4 ${
+          user.email ? "" : "bg-custom-lime"
+        }`}
+      >
+        {user.email && (
+          <>
+            <Image
+              src="/icon-avatar.svg"
+              alt="Аватар"
+              width={41}
+              height={41}
+              className="mr-5"
+            />
+            <button
+              className="flex justify-center leading-110 text-center text-lg"
+              onClick={handleLoginClick}
+              disabled={!!user.email}
+            >
+              {user.email}
+            </button>
+          </>
+        )}
+        {!user.email && (
+          <button
+            className="flex justify-center leading-110 text-center text-lg"
+            onClick={handleLoginClick}
+          >
+            Войти
+          </button>
+        )}
+        <div className="relative">
+          {user.email && (
+            <button onClick={handleMenuClick}>
+              <Image
+                src="/icon-arrow-to-bottom.svg"
+                alt="Открыть меню"
+                width={9}
+                height={8}
+                className="ml-3"
+              />
+            </button>
+          )}
+          {isOpenMenu && (
+            <TopMenu userEmail={user.email} setIsOpenMenu={setIsOpenMenu} />
+          )}
+        </div>
       </div>
 
       {isLoginOpen && (

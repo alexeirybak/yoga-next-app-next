@@ -19,47 +19,53 @@ export const Login: React.FC<LoginProps> = ({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [isEntering, setIsEntering] = useState(false);
   const dispatch = useDispatch();
   const auth = getAuth();
 
   const handleSignIn = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    if (isEntering) return;
 
-    const emailError = validateEmail(email);
-    const passwordError = validatePassword(password);
+    if (!email.trim()) {
+      setError("Введите логин");
+      return;
+    }
+    if (!password.trim()) {
+      setError("Введите пароль");
+      return;
+    }
+
+    const trimmedEmail = email.trim();
+    const trimmedPassword = password.trim();
+
+    const emailError = validateEmail(trimmedEmail);
+    const passwordError = validatePassword(trimmedPassword);
 
     if (emailError || passwordError) {
       setError(emailError || passwordError);
       return;
     }
-
-    SignIn(event);
+    setIsEntering(true);
+    signIn(event);
   };
 
   const handleEmail = (event: { target: { value: string } }) => {
-    const errorMessage = validateEmail(event.target.value);
-    setEmail(event.target.value);
+    const trimmedValue = event.target.value.trim();
+    const errorMessage = validateEmail(trimmedValue);
+    setEmail(trimmedValue);
     setError(errorMessage);
   };
 
   const handlePassword = (event: { target: { value: string } }) => {
-    const errorMessage = validatePassword(event.target.value);
-    setPassword(event.target.value);
+    const trimmedValue = event.target.value.trim();
+    const errorMessage = validatePassword(trimmedValue);
+    setPassword(trimmedValue);
     setError(errorMessage);
   };
 
-  const SignIn: MouseEventHandler<HTMLButtonElement> = async (event) => {
+  const signIn: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
-
-    if (!email) {
-      setError("Введите email");
-      return;
-    }
-
-    if (!password) {
-      setError("Введите пароль");
-      return;
-    }
     try {
       const userCredential = await signInWithEmailAndPassword(
         auth,
@@ -87,6 +93,7 @@ export const Login: React.FC<LoginProps> = ({
         })
       );
       handleClose();
+      setIsEntering(false);
     } catch (error) {
       if (
         typeof error === "object" &&
@@ -106,6 +113,7 @@ export const Login: React.FC<LoginProps> = ({
       } else {
         setError("Произошла непредвиденная ошибка");
       }
+      setIsEntering(false);
     }
   };
 
@@ -144,9 +152,14 @@ export const Login: React.FC<LoginProps> = ({
       <div className="flex flex-col gap-y-2.5">
         <button
           onClick={handleSignIn}
-          className="w-full bg-custom-lime hover:bg-[#c6ff00] active:bg-black rounded-[46px] h-[52px] py-4 px-[26px] active:text-white text-lg leading-110 transition-colors duration-300 ease-in-out"
+          disabled={isEntering}
+          className={`w-full h-[52px] py-4 px-[26px] text-lg leading-110 rounded-[46px] transition-colors duration-300 ease-in-out ${
+            isEntering
+              ? "bg-white text-[#999] border-[1px] border-[#999]"
+              : "bg-custom-lime hover:bg-[#c6ff00] active:bg-black text-black active:text-white"
+          }`}
         >
-          Войти
+          {isEntering ? "Входим..." : "Войти"}
         </button>
         <button
           onClick={handleRegisterClick}
