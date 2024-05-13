@@ -63,13 +63,12 @@ export const Header: React.FC = () => {
           Онлайн-тренировки для занятий дома
         </p>
       </div>
-      <div
-        className={`flex flex-row justify-center items-center min-w-32 h-14 rounded-full p-4 ${
-          user.email ? "" : "bg-custom-lime"
-        }`}
-      >
-        {user.email && (
-          <>
+      {user.email ? (
+        <div className="relative">
+          <button
+            onClick={() => setIsOpenMenu(!isOpenMenu)}
+            className="flex flex-row items-center"
+          >
             <Image
               src="/icon-avatar.svg"
               alt="Аватар"
@@ -77,40 +76,29 @@ export const Header: React.FC = () => {
               height={41}
               className="mr-5"
             />
-            <button
-              className="flex justify-center leading-110 text-center text-lg"
-              onClick={handleLoginClick}
-              disabled={!!user.email}
-            >
+            <div className="flex justify-center leading-110 text-center text-lg">
               {user.email}
-            </button>
-          </>
-        )}
-        {!user.email && (
-          <button
-            className="flex justify-center leading-110 text-center text-lg"
-            onClick={handleLoginClick}
-          >
-            Войти
+            </div>
+            <Image
+              src="/icon-arrow-to-bottom.svg"
+              alt="Открыть меню"
+              width={15}
+              height={15}
+              className="ml-3"
+            />
           </button>
-        )}
-        <div className="relative">
-          {user.email && (
-            <button onClick={handleMenuClick}>
-              <Image
-                src="/icon-arrow-to-bottom.svg"
-                alt="Открыть меню"
-                width={9}
-                height={8}
-                className="ml-3"
-              />
-            </button>
-          )}
           {isOpenMenu && (
             <TopMenu userEmail={user.email} setIsOpenMenu={setIsOpenMenu} />
           )}
         </div>
-      </div>
+      ) : (
+        <button
+          className="flex flex-row justify-center leading-110 text-center text-lg items-center min-w-32 h-14 rounded-full p-4 bg-custom-lime"
+          onClick={handleLoginClick}
+        >
+          Войти
+        </button>
+      )}
 
       {isLoginOpen && (
         <div className={styles.modalOverlay}>
