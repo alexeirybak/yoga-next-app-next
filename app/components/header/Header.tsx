@@ -8,7 +8,6 @@ import { TopMenu } from "../menu/Menu";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
-import styles from "./Header.module.css";
 import { setUser } from "@/app/store/slices/userSlice";
 import {
   openLogin,
@@ -47,10 +46,6 @@ export const Header: React.FC = () => {
 
   const handleCloseRegister = () => {
     dispatch(closeRegister());
-  };
-
-  const handleMenuClick = () => {
-    setIsOpenMenu(!isOpenMenu);
   };
 
   return (
@@ -101,25 +96,17 @@ export const Header: React.FC = () => {
       )}
 
       {isLoginOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <Login
-              handleClose={handleCloseLogin}
-              handleRegisterClick={handleRegisterClick}
-            />
-          </div>
-        </div>
+        <Login
+          handleClose={handleCloseLogin}
+          handleRegisterClick={handleRegisterClick}
+        />
       )}
 
       {isRegisterOpen && (
-        <div className={styles.modalOverlay}>
-          <div className={styles.modalContent}>
-            <Register
-              handleClose={handleCloseRegister}
-              handleLoginClick={handleLoginClick}
-            />
-          </div>
-        </div>
+        <Register
+          handleClose={handleCloseRegister}
+          handleLoginClick={handleLoginClick}
+        />
       )}
     </header>
   );
