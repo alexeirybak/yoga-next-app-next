@@ -1,7 +1,10 @@
+"use client";
+
 import Image from "next/image";
-import { Metadata } from "next";
 import { EnterButtonFromCourses } from "../components/enterButtonFromCourses/EnterFromCourses";
-import { getCoursesDataById } from "../Api/getCoursesData";
+import { useEffect, useState } from "react";
+import { db } from "../firebase";
+import { ref, onValue } from "firebase/database";
 import styles from "./CourseDescription.module.css";
 
 type Props = {
@@ -10,40 +13,34 @@ type Props = {
   };
 };
 
-export async function generateMetadata({
-  params: { id },
-}: Props): Promise<Metadata | { notFound: true }> {
+type CourseData = {
+  name: string;
+  image: string;
+  reasons: string[];
+  directions: string[];
+  description: string[];
+};
+
+export default function CourseDescription({ params: { id } }: Props) {
   const parsedId = parseInt(id, 10) - 1;
-  const courseDescriptionData = await getCoursesDataById(parsedId);
+  const [courseData, setCourseData] = useState<CourseData | null>(null);
 
-  if (parsedId > 5) {
-    return { notFound: true };
-  }
+  useEffect(() => {
+    const coursesRef = ref(db, `courses/${parsedId}`);
+    const unsubscribe = onValue(coursesRef, (snapshot) => {
+      const data = snapshot.val();
+      console.log(data);
+      setCourseData(data);
+    });
 
-  const courseData = courseDescriptionData;
-
-  if (!courseData) {
-    return {
-      title: "Курс не найден",
-      description: "Запрашиваемый курс не существует или временно недоступен.",
+    return () => {
+      unsubscribe();
     };
+  }, [parsedId]);
+
+  if (courseData === null) {
+    return null;
   }
-
-  return {
-    title: courseData.name,
-    description: courseData.description.join(" "),
-  };
-}
-
-export default async function CourseDescription({ params: { id } }: Props) {
-  const parsedId = parseInt(id, 10) - 1;
-
-  if (parsedId > 4) {
-    return <p>Запрашиваемый курс не существует или временно недоступен.</p>;
-  }
-
-  const courseDescriptionData = await getCoursesDataById(parsedId);
-  const courseData = courseDescriptionData;
 
   return (
     <div>
@@ -58,7 +55,7 @@ export default async function CourseDescription({ params: { id } }: Props) {
           Подойдет для вас, если:
         </p>
         <ul className="flex flex-row flex-nowrap gap-[17px] text-2xl text-white mb-[60px]">
-          {courseData.reasons.map((reason: [], index: number) => (
+          {courseData?.reasons.map((reason: string, index: number) => (
             <li
               key={index}
               className={`p-5 rounded-[28px] flex flex-row flex-nowrap gap-x-6 items-center ${styles.bgReasons}`}
@@ -74,7 +71,7 @@ export default async function CourseDescription({ params: { id } }: Props) {
           Направления
         </div>
         <div className="p-[30px] grid grid-cols-3 bg-custom-lime rounded-[28px] text-2xl gap-y-[34px] gap-x-[124px] mb-[102px]">
-          {courseData.directions.map((direction: [], indexDir: number) => (
+          {courseData.directions.map((direction: string, indexDir: number) => (
             <div key={indexDir} className="flex gap-x-1">
               <div className="flex flex-row ">
                 <Image
@@ -100,7 +97,7 @@ export default async function CourseDescription({ params: { id } }: Props) {
                 Начните путь к новому телу
               </div>
               <ul className="list-disc pl-5 text-2xl">
-                {courseData.description.map((benefit: [], indexBen: number) => (
+                {courseData.description.map((benefit: string, indexBen: number) => (
                   <li key={indexBen}>{benefit}</li>
                 ))}
               </ul>

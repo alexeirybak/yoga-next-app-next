@@ -1,21 +1,30 @@
-import React from "react";
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
-import Card from "./components/card/Card";
+import { Card } from "./components/card/Card";
 import ScrollToTopButton from "./components/ScrollToTopButton";
-import { Metadata } from "next";
-import { getCoursesData } from "./Api/getCoursesData";
+import { db } from "./firebase";
+import { ref, onValue } from "firebase/database";
 import styles from "./Home.module.css";
 
-export const metadata: Metadata = {
-  title: "Фитнес-курсы",
-  description: "5 видов курсов для людей всех возрастов",
-};
+export default function Home() {
+  const [courses, setCourses] = useState([]);
 
-export default async function Home() {
-  const courses = await getCoursesData();
+  useEffect(() => {
+    const coursesRef = ref(db, "courses");
+    const unsubscribe = onValue(coursesRef, (snapshot) => {
+      const data = snapshot.val();
+      setCourses(data);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   return (
-    <div className="max-w-[1440px] mx-auto ">
+    <div className="max-w-[1440px] mx-{{{auto ">
       <div className="flex flex-row justify-between gap-x-5">
         <div className="text-5xl font-bold max-w-[860px] mb-[50px]">
           Начните заниматься спортом и улучшите качество своей жизни

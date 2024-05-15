@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getDatabase, ref, update } from "firebase/database";
 import styles from "../../Home.module.css";
 
 type CardData = {
@@ -12,13 +14,40 @@ type CardProps = {
   cardData: CardData;
 };
 
-const Card: React.FC<CardProps> = ({ cardData }) => {
+export const Card: React.FC<CardProps> = ({ cardData }) => {
+  const handleSubscribe = async () => {
+    const auth = getAuth();
+    const db = getDatabase();
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const userId = user.uid;
+        const courseId = cardData._id;
+
+        // Явно указываем тип для объекта updates
+        const updates: { [key: string]: boolean } = {};
+        updates[`subscriptions/${courseId}`] = true;
+
+        // Обновляем базу данных Firebase
+        await update(ref(db, `users/${userId}`), updates);
+      } else {
+        alert("Нужна авторизация");
+      }
+    });
+  };
+
   return (
     <div
       className={`flex flex-col h-[500px] relative bg-white rounded-3xl ${styles.card}`}
     >
       <Link href={`/${cardData._id}`} className="absolute top-20px right-20px">
-        <Image src="/icon-plus.svg" alt="Добавить" width={27} height={27} />
+        <Image
+          src="/icon-plus.svg"
+          alt="Добавить"
+          width={27}
+          height={27}
+          onClick={handleSubscribe}
+        />
       </Link>
       <Image
         src={`/${cardData.image}.jpg`}
@@ -52,5 +81,3 @@ const Card: React.FC<CardProps> = ({ cardData }) => {
     </div>
   );
 };
-
-export default Card;

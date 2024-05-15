@@ -21,7 +21,7 @@ export const EnterButtonFromCourses = () => {
       className="bg-custom-lime h-14 rounded-[46px] flex items-center justify-center leading-110 text-lg"
       onClick={handleLoginClick}
     >
-      Войдите, чтобы добавить курс
+      {user ? "Добавить курс" : "Войдите, чтобы добавить курс"}
     </button>
   );
 };
