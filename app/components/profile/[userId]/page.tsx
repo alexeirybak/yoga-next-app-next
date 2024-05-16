@@ -1,20 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
 import { NewPassword } from "../../changePassword/ChangePassword";
 import { removeUser } from "@/app/store/slices/userSlice";
 import { useRouter } from "next/navigation";
+import { getAuth } from "firebase/auth";
+import { getDatabase, ref, onValue } from "firebase/database";
 import Image from "next/image";
+import { Card } from "../../card/Card";
 import styles from "../../header/Header.module.css";
+
+type CardData = {
+  _id: string;
+  image: string;
+  name: string;
+};
 
 export default function UserProfile() {
   const dispatch = useDispatch();
-  const userPro = useSelector((state: RootState) => state.user);
+  const user = useSelector((state: RootState) => state.user);
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
+  const [subscriptions, setSubscriptions] = useState<string[]>([]);
   const router = useRouter();
+
+  useEffect(() => {
+    const db = getDatabase();
+    const userRef = ref(db, `users/${user.id}/courses`);
+
+    const unsubscribe = onValue(userRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const courseData: CardData[] = Object.keys(data).map((courseId) => ({
+          _id: courseId,
+          image: data[courseId].image,
+          name: data[courseId].name,
+        }));
+        setSubscriptions(courseData);
+      }
+    });
+
+    return () => unsubscribe();
+  }, [user.id]);
 
   const handleLogout = () => {
     dispatch(removeUser());
@@ -35,7 +64,7 @@ export default function UserProfile() {
         <div className="flex flex-col text-lg leading-110 gap-y-[30px]">
           <div className="text-[32px] font-medium">Имя</div>
           <div className="flex flex-col gap-y-2.5">
-            {userPro ? `Почта: ${userPro.email}` : ""}
+            {user ? `Почта: ${user.email}` : ""}
             <p>Пароль: *...*</p>
           </div>
           <div className="flex flex-row gap-x-2.5">
@@ -52,6 +81,9 @@ export default function UserProfile() {
               Выйти
             </button>
           </div>
+          {subscriptions.map((cardData) => (
+            <Card key={cardData._id} cardData={cardData} />
+          ))}
         </div>
       </div>
       {showChangePasswordForm && (

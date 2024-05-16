@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { getAuth } from "firebase/auth";
 import { getDatabase, ref, update } from "firebase/database";
 import styles from "../../Home.module.css";
 
@@ -18,22 +18,24 @@ export const Card: React.FC<CardProps> = ({ cardData }) => {
   const handleSubscribe = async () => {
     const auth = getAuth();
     const db = getDatabase();
+  
+    if (auth.currentUser) {
+      const userId = auth.currentUser.uid;
+      const courseId = cardData._id;
+  
+      const courseData = {
+        [courseId]: {
+          courseId: courseId,
+          image: cardData.image,
+          name: cardData.name,
+        },
+      };
 
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const userId = user.uid;
-        const courseId = cardData._id;
-
-        // Явно указываем тип для объекта updates
-        const updates: { [key: string]: boolean } = {};
-        updates[`subscriptions/${courseId}`] = true;
-
-        // Обновляем базу данных Firebase
-        await update(ref(db, `users/${userId}`), updates);
-      } else {
-        alert("Нужна авторизация");
-      }
-    });
+  
+      await update(ref(db, `users/${userId}/courses`), courseData);
+    } else {
+      alert("Нужна авторизация");
+    }
   };
 
   return (

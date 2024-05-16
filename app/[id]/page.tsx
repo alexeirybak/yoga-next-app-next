@@ -29,7 +29,6 @@ export default function CourseDescription({ params: { id } }: Props) {
     const coursesRef = ref(db, `courses/${parsedId}`);
     const unsubscribe = onValue(coursesRef, (snapshot) => {
       const data = snapshot.val();
-      console.log(data);
       setCourseData(data);
     });
 
