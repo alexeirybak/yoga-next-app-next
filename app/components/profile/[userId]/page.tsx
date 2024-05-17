@@ -1,58 +1,79 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useCallback, useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
 import { NewPassword } from "../../changePassword/ChangePassword";
 import { removeUser } from "@/app/store/slices/userSlice";
 import { useRouter } from "next/navigation";
-import { getAuth } from "firebase/auth";
 import { getDatabase, ref, onValue } from "firebase/database";
+import { getAuth, signOut } from "firebase/auth";
 import Image from "next/image";
 import { Card } from "../../card/Card";
+import Link from "next/link";
 import styles from "../../header/Header.module.css";
+import "../../../globals.css";
 
 type CardData = {
   _id: string;
-  image: string;
   name: string;
 };
 
-export default function UserProfile() {
+const UserProfile: React.FC = () => {
   const dispatch = useDispatch();
+  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
   const user = useSelector((state: RootState) => state.user);
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
-  const [subscriptions, setSubscriptions] = useState<string[]>([]);
+  const [subscriptions, setSubscriptions] = useState<CardData[]>([]);
   const router = useRouter();
+  const handleCourseDeleted = useCallback((courseId: string) => {
+    setSubscriptions((prevSubscriptions) =>
+      prevSubscriptions.filter((subscription) => subscription._id !== courseId)
+    );
+  }, []);
 
   useEffect(() => {
-    const db = getDatabase();
-    const userRef = ref(db, `users/${user.id}/courses`);
+    if (!isAuthenticated) {
+      router.push('/');
+    }
+  }, [isAuthenticated, router]);
 
-    const unsubscribe = onValue(userRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        const courseData: CardData[] = Object.keys(data).map((courseId) => ({
-          _id: courseId,
-          image: data[courseId].image,
-          name: data[courseId].name,
-        }));
-        setSubscriptions(courseData);
-      }
-    });
+  useEffect(() => {
+    if (user && user.id) {
+      const db = getDatabase();
+      const userRef = ref(db, `users/${user.id}/courses`);
 
-    return () => unsubscribe();
-  }, [user.id]);
+      const unsubscribe = onValue(userRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          const courseData: CardData[] = Object.entries(data).map(
+            ([courseId, course]) => ({
+              _id: courseId,
+              name: (course as any).name,
+            })
+          );
+          setSubscriptions(courseData);
+        }
+      });
 
-  const handleLogout = () => {
-    dispatch(removeUser());
-    router.push("/");
+      return () => unsubscribe();
+    }
+  }, [user]);
+
+  const handleLogout = async () => {
+    try {
+      const auth = getAuth();
+      await signOut(auth);
+      dispatch(removeUser());
+      router.push("/");
+    } catch (error) {
+      console.error("Ошибка при выходе из системы:", error);
+    }
   };
 
   return (
     <>
-      <h1 className="font-semibold text-4xl mb-10">Профиль</h1>
+      <h1 className="leading-110 text-[40px] font-semibold mb-10">Профиль</h1>
       <div className={`${styles.modalContentProfile}`}>
         <Image
           src="/icon-profile.svg"
@@ -81,14 +102,48 @@ export default function UserProfile() {
               Выйти
             </button>
           </div>
-          {subscriptions.map((cardData) => (
-            <Card key={cardData._id} cardData={cardData} />
-          ))}
         </div>
       </div>
+      <h2 className="mt-[60px] mb-10 leading-110 text-[40px] font-semibold">
+        {subscriptions.length > 0 ? (
+          "Мои курсы"
+        ) : (
+          <>
+            <p>
+              Нет подписок на курсы. Добавьте курс:{" "}
+              <Image
+                src="/addCourse.jpg"
+                width={197}
+                height={90}
+                alt="Как добавить курс"
+                className="m-10"
+              />
+            </p>
+            <p className="text-lg">
+              Для этого перейдите на
+              <Link href="/" className="text-blue-600 hover:text-blue-800 ml-3">
+                главную страницу
+              </Link>
+            </p>
+          </>
+        )}
+      </h2>
+      <div className={`flex flex-wrap justify-left gap-10 mx-auto cards`}>
+        {subscriptions.map((cardData) => (
+          <Card
+            key={cardData._id}
+            cardData={cardData}
+            isSubscribed={true}
+            onCourseDeleted={handleCourseDeleted}
+          />
+        ))}
+      </div>
+
       {showChangePasswordForm && (
         <NewPassword setShowChangePasswordForm={setShowChangePasswordForm} />
       )}
     </>
   );
-}
+};
+
+export default UserProfile;

@@ -14,6 +14,7 @@ type Props = {
 };
 
 type CourseData = {
+  _id: number;
   name: string;
   image: string;
   reasons: string[];
@@ -45,7 +46,7 @@ export default function CourseDescription({ params: { id } }: Props) {
     <div>
       <h1
         className={`max-w-[1440px] h-[310px] mx-auto pl-[40px] pt-[40px] mb-[60px] rounded-3xl text-6xl text-white ${styles.bgTitle}`}
-        style={{ backgroundImage: `url(${courseData.image}-large.jpg)` }}
+        style={{ backgroundImage: `url(largeImg${courseData._id}.jpg)` }}
       >
         {courseData.name}
       </h1>
@@ -101,7 +102,7 @@ export default function CourseDescription({ params: { id } }: Props) {
                 ))}
               </ul>
             </div>
-            <EnterButtonFromCourses />
+            <EnterButtonFromCourses courseId={courseData._id.toString()} courseName={courseData.name} />
           </div>
           <Image
             src="/man.png"

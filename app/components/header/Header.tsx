@@ -24,14 +24,6 @@ export const Header: React.FC = () => {
   );
   const [isOpenMenu, setIsOpenMenu] = useState(false);
 
-  useEffect(() => {
-    const userData = localStorage.getItem("user");
-    if (userData) {
-      const parsedUserData = JSON.parse(userData);
-      dispatch(setUser(parsedUserData));
-    }
-  }, [dispatch]);
-
   const handleLoginClick = () => {
     dispatch(openLogin());
   };

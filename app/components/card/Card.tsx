@@ -1,63 +1,60 @@
 import Image from "next/image";
+import { RootState } from "@/app/store";
 import Link from "next/link";
-import { getAuth } from "firebase/auth";
-import { getDatabase, ref, update } from "firebase/database";
-import styles from "../../Home.module.css";
+import { useSelector } from "react-redux";
+import { SubscribeButton } from "../subscribeButton/SubscribeButton";
+import { UnSubscribeButton } from "../unSubscribedButton/UnSubscribeButton";
+import { handleSubscribe } from "../connectDB/handleSubscribe";
+import { handleUnsubscribe } from "../connectDB/handleUnsubscribe";
+import "../../globals.css";
 
-type CardData = {
-  _id: number;
-  image: string;
+export type CardData = {
+  _id: string;
   name: string;
 };
 
 type CardProps = {
   cardData: CardData;
+  isSubscribed?: boolean;
+  onCourseDeleted: (courseId: string) => void;
 };
 
-export const Card: React.FC<CardProps> = ({ cardData }) => {
-  const handleSubscribe = async () => {
-    const auth = getAuth();
-    const db = getDatabase();
-  
-    if (auth.currentUser) {
-      const userId = auth.currentUser.uid;
-      const courseId = cardData._id;
-  
-      const courseData = {
-        [courseId]: {
-          courseId: courseId,
-          image: cardData.image,
-          name: cardData.name,
-        },
-      };
-
-  
-      await update(ref(db, `users/${userId}/courses`), courseData);
-    } else {
-      alert("Нужна авторизация");
-    }
-  };
+export const Card: React.FC<CardProps> = ({
+  cardData,
+  isSubscribed,
+  onCourseDeleted,
+}) => {
+  const isAuthenticated = useSelector(
+    (state: RootState) => state.user.isAuthenticated
+  );
 
   return (
     <div
-      className={`flex flex-col h-[500px] relative bg-white rounded-3xl ${styles.card}`}
+      className={`flex flex-col h-[500px] relative bg-white rounded-3xl card`}
     >
-      <Link href={`/${cardData._id}`} className="absolute top-20px right-20px">
+      {isSubscribed ? (
+        <UnSubscribeButton
+          handleUnsubscribe={(event) =>
+            handleUnsubscribe(event, isAuthenticated, cardData, onCourseDeleted)
+          }
+        />
+      ) : (
+        <SubscribeButton
+          handleSubscribe={(event) =>
+            handleSubscribe(event, isAuthenticated, cardData)
+          }
+        />
+      )}
+      <Link href={`/${cardData._id}`}>
         <Image
-          src="/icon-plus.svg"
-          alt="Добавить"
-          width={27}
-          height={27}
-          onClick={handleSubscribe}
+          src={`/smallImg${cardData._id}.jpg`}
+          alt={cardData.name}
+          className="rounded-3xl mb-6"
+          width={360}
+          height={325}
         />
       </Link>
-      <Image
-        src={`/${cardData.image}.jpg`}
-        alt={cardData.name}
-        className="rounded-3xl mb-6"
-        width={360}
-        height={325}
-      />
+
       <div className="flex flex-col w-[300px] mx-auto">
         <div className="text-3xl mb-5">{cardData.name}</div>
         <div className="flex flex-row flex-wrap gap-6px">

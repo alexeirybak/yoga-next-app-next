@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { SetStateAction } from "react";
 import { useDispatch } from "react-redux";
 import { removeUser } from "@/app/store/slices/userSlice";
+import { getAuth, signOut } from "firebase/auth";
 import styles from "../header/Header.module.css";
 
 interface TopMenuProps {
@@ -23,10 +24,16 @@ export const TopMenu: React.FC<TopMenuProps> = ({
   const user = useSelector((state: RootState) => state.user);
   const userId = user.id || null;
 
-  const handleLogout = () => {
-    dispatch(removeUser());
-    setIsOpenMenu(false);
-    router.push('/');
+  const handleLogout = async () => {
+    try {
+      const auth = getAuth();
+      await signOut(auth);
+      dispatch(removeUser());
+      setIsOpenMenu(false);
+      router.push("/");
+    } catch (error) {
+      console.error("Ошибка при выходе из системы:", error);
+    }
   };
 
   return (

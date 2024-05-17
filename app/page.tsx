@@ -6,7 +6,7 @@ import { Card } from "./components/card/Card";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import { db } from "./firebase";
 import { ref, onValue } from "firebase/database";
-import styles from "./Home.module.css";
+import './globals.css';
 
 export default function Home() {
   const [courses, setCourses] = useState([]);
@@ -45,12 +45,14 @@ export default function Home() {
 
       <div>
         <div
-          className={`flex flex-wrap gap-x-4 gap-y-10 justify-between mx-auto ${styles.cards}`}
+          className={`flex flex-wrap gap-y-10 justify-between mx-auto cards`}
         >
           {courses &&
             courses.map(
               (cardData: any) =>
-                cardData && <Card key={cardData._id} cardData={cardData} />
+                cardData && <Card key={cardData._id} cardData={cardData} isSubscribed={false} onCourseDeleted={function (): void {
+                  throw new Error("Function not implemented.");
+                } }/>
             )}
         </div>
       </div>

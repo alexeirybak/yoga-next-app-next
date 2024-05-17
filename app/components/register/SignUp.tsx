@@ -104,14 +104,14 @@ export const Register: React.FC<RegisterProps> = ({
 
       const idToken = await user.getIdToken(true);
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          email: user.email,
-          id: user.uid,
-          token: idToken,
-        })
-      );
+      // localStorage.setItem(
+      //   "user",
+      //   JSON.stringify({
+      //     email: user.email,
+      //     id: user.uid,
+      //     token: idToken,
+      //   })
+      // );
 
       dispatch(
         setUser({
@@ -134,8 +134,8 @@ export const Register: React.FC<RegisterProps> = ({
   };
 
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modalContent}>
+    <div className='modalOverlay'>
+      <div className='modalContent'>
         <div className="relative">
           <button
             className="text-2xl w-5 absolute right-0"

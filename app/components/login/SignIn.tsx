@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/userSlice";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { validateEmail, validatePassword } from "@/app/services/validation";
-import styles from "../header/Header.module.css";
 
 type LoginProps = {
   handleClose: () => void;
@@ -76,14 +75,6 @@ export const Login: React.FC<LoginProps> = ({
 
       const user = userCredential.user;
       const token = await user.getIdToken();
-      localStorage.setItem(
-        "user",
-        JSON.stringify({
-          email: user.email,
-          id: user.uid,
-          token: token,
-        })
-      );
 
       dispatch(
         setUser({
@@ -118,8 +109,8 @@ export const Login: React.FC<LoginProps> = ({
   };
 
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modalContent}>
+    <div className='modalOverlay'>
+      <div className='modalContent'>
         <div className="relative">
           <button
             className="text-2xl w-5 absolute right-0"

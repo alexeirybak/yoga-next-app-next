@@ -1,17 +1,18 @@
-"use client"
+"use client";
 
 import Image from "next/image";
 import { MouseEventHandler, SetStateAction, useEffect, useState } from "react";
 import { validatePassword } from "@/app/services/validation";
-import styles from "./../header/Header.module.css";
 import { updatePassword, getAuth, User } from "firebase/auth";
-
+import "../../globals.css";
 
 type NewPasswordProps = {
   setShowChangePasswordForm: (value: SetStateAction<boolean>) => void;
 };
 
-export const NewPassword: React.FC<NewPasswordProps> = ({ setShowChangePasswordForm }) => {
+export const NewPassword: React.FC<NewPasswordProps> = ({
+  setShowChangePasswordForm,
+}) => {
   const [isChanging, setIsChanging] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [newPassword, setNewPassword] = useState("");
@@ -21,7 +22,6 @@ export const NewPassword: React.FC<NewPasswordProps> = ({ setShowChangePasswordF
   useEffect(() => {
     const auth = getAuth();
     setUser(auth.currentUser);
-    console.log(auth)
   }, []);
 
   const handleChangePassword = async (
@@ -83,8 +83,8 @@ export const NewPassword: React.FC<NewPasswordProps> = ({ setShowChangePasswordF
     }
   };
   return (
-    <div className={styles.modalOverlay}>
-      <div className={styles.modalContent}>
+    <div className="modalOverlay">
+      <div className="modalContent">
         <div className="relative">
           <button
             className="text-2xl w-5 absolute right-0"
