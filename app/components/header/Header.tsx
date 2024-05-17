@@ -6,10 +6,10 @@ import { Login } from "@/app/components/login/SignIn";
 import { Register } from "../register/SignUp";
 import { PopUp } from "../popUp/PopUp";
 import { TopMenu } from "../menu/Menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { openModal, closeModal } from "@/app/store/slices/modalSlice";
 import { RootState } from "@/app/store";
-import { setUser } from "@/app/store/slices/userSlice";
 import {
   openLogin,
   closeLogin,
@@ -26,6 +26,7 @@ export const Header: React.FC = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [modalMessage, setModalMessage] = useState('');
+  const modal = useSelector((state: RootState) => state.modal);
 
   const handleLoginClick = () => {
     dispatch(openLogin());
@@ -42,6 +43,22 @@ export const Header: React.FC = () => {
   const handleCloseRegister = () => {
     dispatch(closeRegister());
   };
+
+  const handleOpenModal = (message: string) => {
+    dispatch(openModal(message));
+    setTimeout(() => {
+      dispatch(closeModal());
+    }, 1500); // Закрываем модальное окно через 1,5 секунды
+  };
+
+  // Очищаем модальное окно, если оно было открыто ранее
+  useEffect(() => {
+    if (modal.isOpen) {
+      setTimeout(() => {
+        dispatch(closeModal());
+      }, 1500);
+    }
+  }, [modal.isOpen, dispatch]);
 
   return (
     <header className="flex flex-row gap-y-5 justify-between px-[140px] mb-[60px] pt-12 mx-auto">
@@ -108,6 +125,7 @@ export const Header: React.FC = () => {
         />
       )}
       {showModal && <PopUp message={modalMessage}/>}
+      {modal.isOpen && <PopUp message={modal.message} />}
     </header>
   );
 };

@@ -1,14 +1,13 @@
 import Image from "next/image";
 import { RootState } from "@/app/store";
 import Link from "next/link";
-import { useSelector } from "react-redux";
 import { SubscribeButton } from "../subscribeButton/SubscribeButton";
 import { UnSubscribeButton } from "../unSubscribedButton/UnSubscribeButton";
 import { handleSubscribe } from "../connectDB/handleSubscribe";
 import { handleUnsubscribe } from "../connectDB/handleUnsubscribe";
-import { PopUp } from "../popUp/PopUp";
+import { useDispatch, useSelector } from "react-redux";
+import { openModal, closeModal } from "@/app/store/slices/modalSlice";
 import "../../globals.css";
-import { useState } from "react";
 
 export type CardData = {
   _id: string;
@@ -26,35 +25,34 @@ export const Card: React.FC<CardProps> = ({
   isSubscribed,
   onCourseDeleted,
 }) => {
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
-
-  const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
+  const modal = useSelector((state: RootState) => state.modal);
 
   const handleSubscribeClick = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     if (!isAuthenticated) {
-      alert("Нужна авторизация");
+      dispatch(openModal("Нужна авторизация"));
       return;
     }
     await handleSubscribe(event, cardData);
-    setModalMessage("Вы успешно подписались");
-    setShowModal(true);
+    dispatch(openModal("Вы успешно подписались"));
     setTimeout(() => {
-      setShowModal(false);
+      dispatch(closeModal());
     }, 3000);
   };
 
-  const handleUnsubscribeClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleUnsubscribeClick = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     const message = await handleUnsubscribe(event, cardData, onCourseDeleted);
     if (message) {
-      setModalMessage(message);
-      setShowModal(true);
+      dispatch(openModal(message));
       setTimeout(() => {
-        setShowModal(false);
+        dispatch(closeModal());
       }, 3000);
     }
   };
@@ -100,7 +98,6 @@ export const Card: React.FC<CardProps> = ({
           </div>
         </div>
       </div>
-      {showModal && <PopUp message={modalMessage} />}
     </div>
   );
 };
