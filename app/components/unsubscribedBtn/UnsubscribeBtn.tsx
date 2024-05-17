@@ -6,7 +6,7 @@ type UnsubscribeButtonProps = {
   ) => void;
 };
 
-export const UnSubscribeButton: React.FC<UnsubscribeButtonProps> = ({
+export const UnsubscribeButton: React.FC<UnsubscribeButtonProps> = ({
   handleUnsubscribe,
 }) => {
   return (

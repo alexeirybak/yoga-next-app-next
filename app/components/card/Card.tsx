@@ -1,12 +1,14 @@
 import Image from "next/image";
 import { RootState } from "@/app/store";
 import Link from "next/link";
-import { SubscribeButton } from "../subscribeButton/SubscribeButton";
-import { UnSubscribeButton } from "../unSubscribedButton/UnSubscribeButton";
+import { SubscribeButton } from "../subscribeBtn/SubscribeBtn";
+import { UnsubscribeButton } from "../unsubscribedBtn/UnsubscribeBtn";
 import { handleSubscribe } from "../connectDB/handleSubscribe";
 import { handleUnsubscribe } from "../connectDB/handleUnsubscribe";
+import { ModalConfirm } from "../modalConfirm/ModalConfirm";
 import { useDispatch, useSelector } from "react-redux";
 import { openModal, closeModal } from "@/app/store/slices/modalSlice";
+import { useState } from "react";
 import "../../globals.css";
 
 export type CardData = {
@@ -26,6 +28,11 @@ export const Card: React.FC<CardProps> = ({
   onCourseDeleted,
 }) => {
   const dispatch = useDispatch();
+  const [showUnsubscribeConfirm, setShowUnsubscribeConfirm] = useState(false);
+  const [unsubscribeEvent, setUnsubscribeEvent] = useState<React.MouseEvent<
+    HTMLButtonElement,
+    MouseEvent
+  > | null>(null);
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
@@ -47,13 +54,30 @@ export const Card: React.FC<CardProps> = ({
   const handleUnsubscribeClick = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    const message = await handleUnsubscribe(event, cardData, onCourseDeleted);
-    if (message) {
-      dispatch(openModal(message));
-      setTimeout(() => {
-        dispatch(closeModal());
-      }, 1500);
+    event.stopPropagation();
+    setUnsubscribeEvent(event);
+    setShowUnsubscribeConfirm(true);
+  };
+
+  const handleConfirmUnsubscribe = async () => {
+    if (unsubscribeEvent) {
+      const message = await handleUnsubscribe(
+        unsubscribeEvent,
+        cardData,
+        onCourseDeleted
+      );
+      if (message) {
+        dispatch(openModal(message));
+        setTimeout(() => {
+          dispatch(closeModal());
+        }, 1500);
+      }
     }
+    setShowUnsubscribeConfirm(false);
+  };
+
+  const handleCancelUnsubscribe = () => {
+    setShowUnsubscribeConfirm(false);
   };
 
   return (
@@ -61,7 +85,7 @@ export const Card: React.FC<CardProps> = ({
       className={`flex flex-col h-[500px] relative bg-white rounded-3xl card`}
     >
       {isSubscribed ? (
-        <UnSubscribeButton handleUnsubscribe={handleUnsubscribeClick} />
+        <UnsubscribeButton handleUnsubscribe={handleUnsubscribeClick} />
       ) : (
         <SubscribeButton handleSubscribe={handleSubscribeClick} />
       )}
@@ -97,6 +121,12 @@ export const Card: React.FC<CardProps> = ({
           </div>
         </div>
       </div>
+      {showUnsubscribeConfirm && (
+        <ModalConfirm
+          onConfirm={handleConfirmUnsubscribe}
+          onCancel={handleCancelUnsubscribe}
+        />
+      )}
     </div>
   );
 };
