@@ -22,7 +22,7 @@ export const EnterButtonFromCourses = ({ courseId, courseName }: Props) => {
   ) => {
     if (isAuthenticated) {
       const cardData: CardData = { _id: courseId, name: courseName };
-      await handleSubscribe(event, isAuthenticated, cardData);
+      await handleSubscribe(event, cardData);
     } else {
       dispatch(openLogin());
     }
@@ -30,7 +30,7 @@ export const EnterButtonFromCourses = ({ courseId, courseName }: Props) => {
 
   return (
     <button
-      className="bg-custom-lime h-14 rounded-[46px] flex items-center justify-center leading-110 text-lg"
+      className="bg-custom-lime h-14 rounded-[46px] flex items-center justify-center text-lg leading-110"
       onClick={handleLoginClick}
     >
       {isAuthenticated ? "Добавить курс" : "Войдите, чтобы добавить курс"}

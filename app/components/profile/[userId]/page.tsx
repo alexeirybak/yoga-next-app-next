@@ -26,6 +26,7 @@ const UserProfile: React.FC = () => {
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [subscriptions, setSubscriptions] = useState<CardData[]>([]);
   const router = useRouter();
+  
   const handleCourseDeleted = useCallback((courseId: string) => {
     setSubscriptions((prevSubscriptions) =>
       prevSubscriptions.filter((subscription) => subscription._id !== courseId)
@@ -73,7 +74,7 @@ const UserProfile: React.FC = () => {
 
   return (
     <>
-      <h1 className="leading-110 text-[40px] font-semibold mb-10">Профиль</h1>
+      <h1 className="text-[40px] font-semibold mb-10 leading-110">Профиль</h1>
       <div className={`${styles.modalContentProfile}`}>
         <Image
           src="/icon-profile.svg"
@@ -104,7 +105,7 @@ const UserProfile: React.FC = () => {
           </div>
         </div>
       </div>
-      <h2 className="mt-[60px] mb-10 leading-110 text-[40px] font-semibold">
+      <h2 className="mt-[60px] mb-10 text-[40px] font-semibold leading-110">
         {subscriptions.length > 0 ? (
           "Мои курсы"
         ) : (

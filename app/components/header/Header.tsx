@@ -4,8 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Login } from "@/app/components/login/SignIn";
 import { Register } from "../register/SignUp";
+import { PopUp } from "../popUp/PopUp";
 import { TopMenu } from "../menu/Menu";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
 import { setUser } from "@/app/store/slices/userSlice";
@@ -23,6 +24,8 @@ export const Header: React.FC = () => {
     (state: RootState) => state.form
   );
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const handleLoginClick = () => {
     dispatch(openLogin());
@@ -63,7 +66,7 @@ export const Header: React.FC = () => {
               height={41}
               className="mr-5"
             />
-            <div className="flex justify-center leading-110 text-center text-lg">
+            <div className="flex justify-center text-center text-lg leading-110">
               {user.email}
             </div>
             <Image
@@ -80,7 +83,7 @@ export const Header: React.FC = () => {
         </div>
       ) : (
         <button
-          className="flex flex-row justify-center leading-110 text-center text-lg items-center min-w-32 h-14 rounded-full p-4 bg-custom-lime"
+          className="flex flex-row justify-center text-center text-lg items-center min-w-32 h-14 rounded-full p-4 bg-custom-lime leading-110"
           onClick={handleLoginClick}
         >
           Войти
@@ -91,6 +94,8 @@ export const Header: React.FC = () => {
         <Login
           handleClose={handleCloseLogin}
           handleRegisterClick={handleRegisterClick}
+          setShowModal={setShowModal}
+          setModalMessage={setModalMessage}
         />
       )}
 
@@ -98,8 +103,11 @@ export const Header: React.FC = () => {
         <Register
           handleClose={handleCloseRegister}
           handleLoginClick={handleLoginClick}
+          setShowModal={setShowModal}
+          setModalMessage={setModalMessage}
         />
       )}
+      {showModal && <PopUp message={modalMessage}/>}
     </header>
   );
 };

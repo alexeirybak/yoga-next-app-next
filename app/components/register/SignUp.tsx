@@ -1,21 +1,24 @@
 "use client";
 
 import Image from "next/image";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, SetStateAction, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/userSlice";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { validateEmail, validatePassword } from "@/app/services/validation";
-import styles from "../header/Header.module.css";
 
 type RegisterProps = {
   handleClose: () => void;
   handleLoginClick: () => void;
+  setShowModal: (value: SetStateAction<boolean>) => void;
+  setModalMessage: (message: string) => void;
 };
 
 export const Register: React.FC<RegisterProps> = ({
   handleClose,
   handleLoginClick,
+  setShowModal,
+  setModalMessage,
 }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -104,15 +107,6 @@ export const Register: React.FC<RegisterProps> = ({
 
       const idToken = await user.getIdToken(true);
 
-      // localStorage.setItem(
-      //   "user",
-      //   JSON.stringify({
-      //     email: user.email,
-      //     id: user.uid,
-      //     token: idToken,
-      //   })
-      // );
-
       dispatch(
         setUser({
           email: user.email,
@@ -122,6 +116,12 @@ export const Register: React.FC<RegisterProps> = ({
       );
       handleClose();
       setIsRegistering(false);
+
+      setShowModal(true);
+      setModalMessage("Вы успешно зарегистрировались");
+      setTimeout(() => {
+        setShowModal(false);
+      }, 3000);
     } catch (error) {
       const typedError = error as Error;
       if (typedError.message.includes("auth/email-already-in-use")) {
@@ -134,8 +134,8 @@ export const Register: React.FC<RegisterProps> = ({
   };
 
   return (
-    <div className='modalOverlay'>
-      <div className='modalContent'>
+    <div className="modalOverlay">
+      <div className="modalContent">
         <div className="relative">
           <button
             className="text-2xl w-5 absolute right-0"

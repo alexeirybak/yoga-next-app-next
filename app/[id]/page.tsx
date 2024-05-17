@@ -51,7 +51,7 @@ export default function CourseDescription({ params: { id } }: Props) {
         {courseData.name}
       </h1>
       <div>
-        <p className="text-[40px] font-semibold leading-110 text-left mb-[40px]">
+        <p className="text-[40px] font-semibold  text-left mb-[40px] leading-110">
           Подойдет для вас, если:
         </p>
         <ul className="flex flex-row flex-nowrap gap-[17px] text-2xl text-white mb-[60px]">
@@ -67,7 +67,7 @@ export default function CourseDescription({ params: { id } }: Props) {
         </ul>
       </div>
       <div>
-        <div className="text-[40px] mb-10 font-semibold leading-110 text-left ">
+        <div className="text-[40px] mb-10 font-semibold text-left leading-110">
           Направления
         </div>
         <div className="p-[30px] grid grid-cols-3 bg-custom-lime rounded-[28px] text-2xl gap-y-[34px] gap-x-[124px] mb-[102px]">

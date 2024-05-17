@@ -3,17 +3,11 @@ import { getDatabase, ref, remove } from "firebase/database";
 import { CardData } from "../card/Card";
 
 export const handleUnsubscribe = async (
-  event: React.MouseEvent<HTMLImageElement>,
-  isAuthenticated: boolean,
+  event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   cardData: CardData,
   onCourseDeleted: (courseId: string) => void
 ) => {
   event.stopPropagation();
-
-  if (!isAuthenticated) {
-    alert("Нужна авторизация");
-    return;
-  }
 
   const auth = getAuth();
   const db = getDatabase();
@@ -30,9 +24,13 @@ export const handleUnsubscribe = async (
       try {
         await remove(ref(db, `users/${userId}/courses/${courseId}`));
         onCourseDeleted(courseId);
+        return "Вы успешно отписались"; 
       } catch (error) {
         console.error("Ошибка при удалении курса:", error);
+        return "Ошибка при отписке от курса"; 
       }
+    } else {
+      return "Отписка отменена"; 
     }
   } else {
     alert("Нужна авторизация");

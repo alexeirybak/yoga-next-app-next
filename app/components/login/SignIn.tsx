@@ -4,17 +4,22 @@ import Image from "next/image";
 import { MouseEventHandler, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/userSlice";
+import { SetStateAction } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { validateEmail, validatePassword } from "@/app/services/validation";
 
 type LoginProps = {
   handleClose: () => void;
   handleRegisterClick: () => void;
+  setShowModal: (value: SetStateAction<boolean>) => void;
+  setModalMessage: (message: string) => void; 
 };
 
 export const Login: React.FC<LoginProps> = ({
   handleClose,
   handleRegisterClick,
+  setShowModal,
+  setModalMessage
 }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -85,6 +90,12 @@ export const Login: React.FC<LoginProps> = ({
       );
       handleClose();
       setIsEntering(false);
+      setShowModal(true);
+      setModalMessage("Вы успешно вошли");
+      setTimeout(() => {
+        setShowModal(false);
+      }, 3000);
+
     } catch (error) {
       if (
         typeof error === "object" &&
@@ -109,8 +120,8 @@ export const Login: React.FC<LoginProps> = ({
   };
 
   return (
-    <div className='modalOverlay'>
-      <div className='modalContent'>
+    <div className="modalOverlay">
+      <div className="modalContent">
         <div className="relative">
           <button
             className="text-2xl w-5 absolute right-0"
@@ -151,7 +162,7 @@ export const Login: React.FC<LoginProps> = ({
             <button
               onClick={handleSignIn}
               disabled={isEntering}
-              className={`w-full h-[52px] py-4 px-[26px] text-lg leading-110 rounded-[46px] transition-colors duration-300 ease-in-out ${
+              className={`w-full h-[52px] py-4 px-[26px] text-lg rounded-[46px] transition-colors duration-300 leading-110 ease-in-out ${
                 isEntering
                   ? "bg-white text-[#999] border-[1px] border-[#999]"
                   : "bg-custom-lime hover:bg-[#c6ff00] active:bg-black text-black active:text-white"

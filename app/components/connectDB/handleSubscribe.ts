@@ -4,14 +4,9 @@ import { CardData } from "../card/Card";
 
 export const handleSubscribe = async (
   event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  isAuthenticated: boolean,
   cardData: CardData
 ) => {
   event.stopPropagation();
-  if (!isAuthenticated) {
-    alert("Нужна авторизация");
-    return;
-  }
 
   const auth = getAuth();
   const db = getDatabase();
@@ -28,7 +23,12 @@ export const handleSubscribe = async (
       },
     };
 
-    await update(ref(db, `users/${userId}/courses`), courseData);
-    alert("Вы подписаны на курс");
+    try {
+      await update(ref(db, `users/${userId}/courses`), courseData);
+      return "Вы успешно подписались";
+    } catch (error) {
+      console.error("Ошибка при подписке на курс:", error);
+      return "Ошибка при подписке на курс";
+    }
   }
 };

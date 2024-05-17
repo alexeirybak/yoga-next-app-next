@@ -6,7 +6,9 @@ import { SubscribeButton } from "../subscribeButton/SubscribeButton";
 import { UnSubscribeButton } from "../unSubscribedButton/UnSubscribeButton";
 import { handleSubscribe } from "../connectDB/handleSubscribe";
 import { handleUnsubscribe } from "../connectDB/handleUnsubscribe";
+import { PopUp } from "../popUp/PopUp";
 import "../../globals.css";
+import { useState } from "react";
 
 export type CardData = {
   _id: string;
@@ -28,22 +30,43 @@ export const Card: React.FC<CardProps> = ({
     (state: RootState) => state.user.isAuthenticated
   );
 
+  const [showModal, setShowModal] = useState(false);
+  const [modalMessage, setModalMessage] = useState("");
+
+  const handleSubscribeClick = async (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    if (!isAuthenticated) {
+      alert("Нужна авторизация");
+      return;
+    }
+    await handleSubscribe(event, cardData);
+    setModalMessage("Вы успешно подписались");
+    setShowModal(true);
+    setTimeout(() => {
+      setShowModal(false);
+    }, 3000);
+  };
+
+  const handleUnsubscribeClick = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const message = await handleUnsubscribe(event, cardData, onCourseDeleted);
+    if (message) {
+      setModalMessage(message);
+      setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+      }, 3000);
+    }
+  };
+
   return (
     <div
       className={`flex flex-col h-[500px] relative bg-white rounded-3xl card`}
     >
       {isSubscribed ? (
-        <UnSubscribeButton
-          handleUnsubscribe={(event) =>
-            handleUnsubscribe(event, isAuthenticated, cardData, onCourseDeleted)
-          }
-        />
+        <UnSubscribeButton handleUnsubscribe={handleUnsubscribeClick} />
       ) : (
-        <SubscribeButton
-          handleSubscribe={(event) =>
-            handleSubscribe(event, isAuthenticated, cardData)
-          }
-        />
+        <SubscribeButton handleSubscribe={handleSubscribeClick} />
       )}
       <Link href={`/${cardData._id}`}>
         <Image
@@ -77,6 +100,7 @@ export const Card: React.FC<CardProps> = ({
           </div>
         </div>
       </div>
+      {showModal && <PopUp message={modalMessage} />}
     </div>
   );
 };
