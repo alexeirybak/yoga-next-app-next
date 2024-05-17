@@ -1,24 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import { MouseEventHandler, SetStateAction, useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/userSlice";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { validateEmail, validatePassword } from "@/app/services/validation";
+import { openModal, closeModal } from "@/app/store/slices/modalSlice";
 
 type RegisterProps = {
   handleClose: () => void;
   handleLoginClick: () => void;
-  setShowModal: (value: SetStateAction<boolean>) => void;
-  setModalMessage: (message: string) => void;
 };
 
 export const Register: React.FC<RegisterProps> = ({
   handleClose,
   handleLoginClick,
-  setShowModal,
-  setModalMessage,
 }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -117,11 +114,10 @@ export const Register: React.FC<RegisterProps> = ({
       handleClose();
       setIsRegistering(false);
 
-      setShowModal(true);
-      setModalMessage("Вы успешно зарегистрировались");
+      dispatch(openModal("Вы успешно зарегистрировались"));
       setTimeout(() => {
-        setShowModal(false);
-      }, 3000);
+        dispatch(closeModal());
+      }, 1500);
     } catch (error) {
       const typedError = error as Error;
       if (typedError.message.includes("auth/email-already-in-use")) {

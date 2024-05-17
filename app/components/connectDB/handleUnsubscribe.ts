@@ -32,7 +32,5 @@ export const handleUnsubscribe = async (
     } else {
       return "Отписка отменена"; 
     }
-  } else {
-    alert("Нужна авторизация");
   }
 };

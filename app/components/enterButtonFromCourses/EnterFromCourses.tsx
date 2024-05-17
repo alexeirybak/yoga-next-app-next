@@ -4,6 +4,7 @@ import { handleSubscribe } from "../connectDB/handleSubscribe";
 import { CardData } from "../card/Card";
 import { openLogin } from "@/app/store/slices/formSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { openModal, closeModal } from "@/app/store/slices/modalSlice";
 import { RootState } from "@/app/store";
 
 type Props = {
@@ -23,6 +24,10 @@ export const EnterButtonFromCourses = ({ courseId, courseName }: Props) => {
     if (isAuthenticated) {
       const cardData: CardData = { _id: courseId, name: courseName };
       await handleSubscribe(event, cardData);
+      dispatch(openModal("Вы успешно подписались"));
+      setTimeout(() => {
+        dispatch(closeModal());
+      }, 1500);
     } else {
       dispatch(openLogin());
     }

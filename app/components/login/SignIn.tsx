@@ -4,22 +4,18 @@ import Image from "next/image";
 import { MouseEventHandler, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/userSlice";
-import { SetStateAction } from "react";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { validateEmail, validatePassword } from "@/app/services/validation";
+import { openModal, closeModal } from "@/app/store/slices/modalSlice";
 
 type LoginProps = {
   handleClose: () => void;
   handleRegisterClick: () => void;
-  setShowModal: (value: SetStateAction<boolean>) => void;
-  setModalMessage: (message: string) => void; 
 };
 
 export const Login: React.FC<LoginProps> = ({
   handleClose,
   handleRegisterClick,
-  setShowModal,
-  setModalMessage
 }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -90,12 +86,11 @@ export const Login: React.FC<LoginProps> = ({
       );
       handleClose();
       setIsEntering(false);
-      setShowModal(true);
-      setModalMessage("Вы успешно вошли");
-      setTimeout(() => {
-        setShowModal(false);
-      }, 3000);
 
+      dispatch(openModal("Вы успешно вошли"));
+      setTimeout(() => {
+        dispatch(closeModal());
+      }, 1500);
     } catch (error) {
       if (
         typeof error === "object" &&

@@ -16,10 +16,10 @@ export const UnSubscribeButton: React.FC<UnsubscribeButtonProps> = ({
     >
       <Image
         src="/icon-minus.svg"
-        alt="Отписаться"
+        alt="Удалить курс"
         width={27}
         height={27}
-        title="Отписаться от курса"
+        title="Удалить курс"
       />
     </button>
   );

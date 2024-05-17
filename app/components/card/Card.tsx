@@ -29,7 +29,6 @@ export const Card: React.FC<CardProps> = ({
   const isAuthenticated = useSelector(
     (state: RootState) => state.user.isAuthenticated
   );
-  const modal = useSelector((state: RootState) => state.modal);
 
   const handleSubscribeClick = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -42,7 +41,7 @@ export const Card: React.FC<CardProps> = ({
     dispatch(openModal("Вы успешно подписались"));
     setTimeout(() => {
       dispatch(closeModal());
-    }, 3000);
+    }, 1500);
   };
 
   const handleUnsubscribeClick = async (
@@ -53,7 +52,7 @@ export const Card: React.FC<CardProps> = ({
       dispatch(openModal(message));
       setTimeout(() => {
         dispatch(closeModal());
-      }, 3000);
+      }, 1500);
     }
   };
 

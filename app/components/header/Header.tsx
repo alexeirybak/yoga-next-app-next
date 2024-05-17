@@ -25,8 +25,9 @@ export const Header: React.FC = () => {
   );
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState('');
+  const [modalMessage, setModalMessage] = useState("");
   const modal = useSelector((state: RootState) => state.modal);
+  const form = useSelector((state: RootState) => state.form);
 
   const handleLoginClick = () => {
     dispatch(openLogin());
@@ -48,10 +49,9 @@ export const Header: React.FC = () => {
     dispatch(openModal(message));
     setTimeout(() => {
       dispatch(closeModal());
-    }, 1500); // Закрываем модальное окно через 1,5 секунды
+    }, 1500);
   };
 
-  // Очищаем модальное окно, если оно было открыто ранее
   useEffect(() => {
     if (modal.isOpen) {
       setTimeout(() => {
@@ -111,8 +111,6 @@ export const Header: React.FC = () => {
         <Login
           handleClose={handleCloseLogin}
           handleRegisterClick={handleRegisterClick}
-          setShowModal={setShowModal}
-          setModalMessage={setModalMessage}
         />
       )}
 
@@ -120,11 +118,9 @@ export const Header: React.FC = () => {
         <Register
           handleClose={handleCloseRegister}
           handleLoginClick={handleLoginClick}
-          setShowModal={setShowModal}
-          setModalMessage={setModalMessage}
         />
       )}
-      {showModal && <PopUp message={modalMessage}/>}
+      {showModal && <PopUp message={modalMessage} />}
       {modal.isOpen && <PopUp message={modal.message} />}
     </header>
   );

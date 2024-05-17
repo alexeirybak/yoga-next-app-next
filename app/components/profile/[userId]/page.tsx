@@ -122,7 +122,7 @@ const UserProfile: React.FC = () => {
             </p>
             <p className="text-lg">
               Для этого перейдите на
-              <Link href="/" className="text-blue-600 hover:text-blue-800 ml-3">
+              <Link href="/" className="text-blue-600 hover:text-blue-800 ml-2">
                 главную страницу
               </Link>
             </p>
