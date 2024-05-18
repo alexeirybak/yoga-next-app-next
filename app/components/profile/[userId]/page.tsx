@@ -11,6 +11,7 @@ import { getAuth, signOut } from "firebase/auth";
 import Image from "next/image";
 import { Card } from "../../card/Card";
 import Link from "next/link";
+import { useAuth } from "@/app/hooks/use-auth";
 import styles from "../../header/Header.module.css";
 import "../../../globals.css";
 
@@ -21,23 +22,23 @@ type CardData = {
 
 const UserProfile: React.FC = () => {
   const dispatch = useDispatch();
-  const isAuthenticated = useSelector((state: RootState) => state.user.isAuthenticated);
+  const { isAuth } = useAuth();
   const user = useSelector((state: RootState) => state.user);
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [subscriptions, setSubscriptions] = useState<CardData[]>([]);
   const router = useRouter();
-  
+
   const handleCourseDeleted = useCallback((courseId: string) => {
     setSubscriptions((prevSubscriptions) =>
       prevSubscriptions.filter((subscription) => subscription._id !== courseId)
     );
   }, []);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.push('/');
-    }
-  }, [isAuthenticated, router]);
+  // useEffect(() => {
+  //   if (!isAuth) {
+  //     router.push("/");
+  //   }
+  // }, [isAuth, router]);
 
   useEffect(() => {
     if (user && user.id) {
@@ -73,7 +74,7 @@ const UserProfile: React.FC = () => {
   };
 
   return (
-    <>
+    <div className="mb-[200px]">
       <h1 className="text-[40px] font-semibold mb-10 leading-110">Профиль</h1>
       <div className={`${styles.modalContentProfile}`}>
         <Image
@@ -92,13 +93,13 @@ const UserProfile: React.FC = () => {
           <div className="flex flex-row gap-x-2.5">
             <button
               onClick={() => setShowChangePasswordForm(true)}
-              className="bg-custom-lime py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
+              className="bg-custom-lime hover:bg-[#c6ff00] active:bg-black active:text-white transition-colors duration-300 ease-in-out py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
             >
               Изменить пароль
             </button>
             <button
               onClick={handleLogout}
-              className="border-[1px] border-black py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
+              className="border-[1px] border-black py-4 px-[26px] rounded-[46px] w-[210px] h-[52px] hover:bg-[#f7f7f7] active:bg-[#e9eced] transition-colors duration-300 ease-in-out"
             >
               Выйти
             </button>
@@ -143,7 +144,7 @@ const UserProfile: React.FC = () => {
       {showChangePasswordForm && (
         <NewPassword setShowChangePasswordForm={setShowChangePasswordForm} />
       )}
-    </>
+    </div>
   );
 };
 

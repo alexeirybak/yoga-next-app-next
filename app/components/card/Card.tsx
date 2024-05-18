@@ -1,14 +1,16 @@
 import Image from "next/image";
-import { RootState } from "@/app/store";
 import Link from "next/link";
+import { usePathname } from 'next/navigation';
 import { SubscribeButton } from "../subscribeBtn/SubscribeBtn";
 import { UnsubscribeButton } from "../unsubscribedBtn/UnsubscribeBtn";
 import { handleSubscribe } from "../connectDB/handleSubscribe";
 import { handleUnsubscribe } from "../connectDB/handleUnsubscribe";
 import { ModalConfirm } from "../modalConfirm/ModalConfirm";
-import { useDispatch, useSelector } from "react-redux";
+import { ProgressCard } from "../progressCard/ProgressCard";
+import { useDispatch } from "react-redux";
 import { openModal, closeModal } from "@/app/store/slices/modalSlice";
 import { useState } from "react";
+import { useAuth } from "@/app/hooks/use-auth";
 import "../../globals.css";
 
 export type CardData = {
@@ -27,20 +29,22 @@ export const Card: React.FC<CardProps> = ({
   isSubscribed,
   onCourseDeleted,
 }) => {
+
+  const pathname = usePathname();
+  const isProfilePage = pathname.includes('/profile/');
+
   const dispatch = useDispatch();
   const [showUnsubscribeConfirm, setShowUnsubscribeConfirm] = useState(false);
   const [unsubscribeEvent, setUnsubscribeEvent] = useState<React.MouseEvent<
     HTMLButtonElement,
     MouseEvent
   > | null>(null);
-  const isAuthenticated = useSelector(
-    (state: RootState) => state.user.isAuthenticated
-  );
+  const { isAuth } = useAuth();
 
   const handleSubscribeClick = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    if (!isAuthenticated) {
+    if (!isAuth) {
       dispatch(openModal("Нужна авторизация"));
       return;
     }
@@ -96,6 +100,7 @@ export const Card: React.FC<CardProps> = ({
           className="rounded-3xl mb-6"
           width={360}
           height={325}
+          title="Перейти к описанию курса"
         />
       </Link>
 
@@ -121,6 +126,7 @@ export const Card: React.FC<CardProps> = ({
           </div>
         </div>
       </div>
+      {isProfilePage && <ProgressCard />}
       {showUnsubscribeConfirm && (
         <ModalConfirm
           onConfirm={handleConfirmUnsubscribe}

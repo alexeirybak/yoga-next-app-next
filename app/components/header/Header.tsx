@@ -100,7 +100,7 @@ export const Header: React.FC = () => {
         </div>
       ) : (
         <button
-          className="flex flex-row justify-center text-center text-lg items-center min-w-32 h-14 rounded-full p-4 bg-custom-lime leading-110"
+          className="flex flex-row justify-center text-center text-lg items-center min-w-32 h-14 rounded-full p-4 leading-110 bg-custom-lime hover:bg-[#c6ff00] active:bg-black active:text-white transition-colors duration-300 ease-in-out"
           onClick={handleLoginClick}
         >
           Войти

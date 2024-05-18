@@ -46,13 +46,13 @@ export const TopMenu: React.FC<TopMenuProps> = ({
         <Link
           href={`/components/profile/${userId}`}
           onClick={() => setIsOpenMenu(false)}
-          className="bg-custom-lime rounded-[30px] px-[26px] py-4 text-center mb-2.5"
+          className="bg-custom-lime hover:bg-[#c6ff00] active:bg-black active:text-white transition-colors duration-300 ease-in-out rounded-[30px] px-[26px] py-4 text-center mb-2.5"
         >
           Мой профиль
         </Link>
         <button
           onClick={handleLogout}
-          className="rounded-[30px] px-[26px] py-4 border-[1px] border-black"
+          className="rounded-[30px] px-[26px] py-4 border-[1px] border-black hover:bg-[#f7f7f7] active:bg-[#e9eced] transition-colors duration-300 ease-in-out"
         >
           Выйти
         </button>
