@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Login } from "@/app/components/login/SignIn";
 import { Register } from "../register/SignUp";
-import { PopUp } from "../popUp/PopUp";
+import { PopUp } from "../popup/Popup";
 import { TopMenu } from "../menu/Menu";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";

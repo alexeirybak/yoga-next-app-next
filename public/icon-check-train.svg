@@ -1,0 +1,13 @@
+<svg width="24.000000" height="24.000000" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>
+			Created with Pixso.
+	</desc>
+	<defs>
+		<clipPath id="clip42_2224">
+			<rect id="Check-in-Circle" width="24.000000" height="24.000000" fill="white" fill-opacity="0"/>
+		</clipPath>
+	</defs>
+	<g clip-path="url(#clip42_2224)">
+		<path id="Icon" d="M12 22C17.52 22 22 17.52 22 12C22 6.47 17.52 2 12 2C6.47 2 2 6.47 2 12C2 17.52 6.47 22 12 22ZM11.91 16.14L17.41 9.64L15.88 8.35L11.13 13.96L8.4 10.84L6.89 12.15L10.39 16.15C10.58 16.37 10.86 16.5 11.15 16.5C11.44 16.49 11.72 16.36 11.91 16.14Z" fill="#BCEC30" fill-opacity="1.000000" fill-rule="evenodd"/>
+	</g>
+</svg>
