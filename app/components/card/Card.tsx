@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { CourseInfo } from "../courseInfo/courseInfo";
@@ -50,12 +52,14 @@ export const Card: React.FC<CardProps> = ({
   const { isAuth } = useAuth();
   const [progressModal, setProgressModal] = useState(false);
   const [workouts, setWorkouts] = useState<WorkoutData[]>([]);
+  const [courseName, setCourseName] = useState("");
 
   useEffect(() => {
     const courseId = parseInt(cardData._id, 10) - 1;
     const courseRef = ref(db, `courses/${courseId}`);
     const getCoursesId = onValue(courseRef, (snapshot) => {
       const courseData = snapshot.val();
+      setCourseName(courseData.name);
       if (courseData && courseData.workout) {
         const workouts: WorkoutData[] = [];
         for (const key in courseData.workout) {
@@ -117,8 +121,6 @@ export const Card: React.FC<CardProps> = ({
     setShowUnsubscribeConfirm(false);
   };
 
-  console.log(workouts)
-
   return (
     <div
       className={`flex flex-col relative bg-white rounded-3xl card pb-[15px]`}
@@ -157,7 +159,10 @@ export const Card: React.FC<CardProps> = ({
           <div className="text-3xl mb-5">{cardData.name}</div>
           <CourseInfo />
           {isProfilePage && (
-            <ProgressCard setProgressModal={setProgressModal} />
+            <ProgressCard
+              setProgressModal={setProgressModal}
+              courseName={courseName}
+            />
           )}
           {progressModal && (
             <ProgressModal

@@ -3,9 +3,8 @@
 import { handleSubscribe } from "../connectDB/handleSubscribe";
 import { CardData } from "../card/Card";
 import { openLogin } from "@/app/store/slices/formSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { openModal, closeModal } from "@/app/store/slices/modalSlice";
-import { RootState } from "@/app/store";
 import { useAuth } from "@/app/hooks/use-auth";
 
 type Props = {

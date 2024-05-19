@@ -2,13 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from 'next/navigation';
 import { Login } from "@/app/components/login/SignIn";
 import { Register } from "../register/SignUp";
 import { PopUp } from "../popup/Popup";
 import { TopMenu } from "../menu/Menu";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { openModal, closeModal } from "@/app/store/slices/modalSlice";
+import { closeModal } from "@/app/store/slices/modalSlice";
 import { RootState } from "@/app/store";
 import {
   openLogin,
@@ -24,10 +25,10 @@ export const Header: React.FC = () => {
     (state: RootState) => state.form
   );
   const [isOpenMenu, setIsOpenMenu] = useState(false);
-  const [showModal, setShowModal] = useState(false);
-  const [modalMessage, setModalMessage] = useState("");
   const modal = useSelector((state: RootState) => state.modal);
-  const form = useSelector((state: RootState) => state.form);
+  const pathname = usePathname();
+
+  const shouldHideParagraph = pathname.startsWith('/pages/profile/') || pathname.startsWith('/pages/workouts/');
 
   const handleLoginClick = () => {
     dispatch(openLogin());
@@ -45,13 +46,6 @@ export const Header: React.FC = () => {
     dispatch(closeRegister());
   };
 
-  const handleOpenModal = (message: string) => {
-    dispatch(openModal(message));
-    setTimeout(() => {
-      dispatch(closeModal());
-    }, 1500);
-  };
-
   useEffect(() => {
     if (modal.isOpen) {
       setTimeout(() => {
@@ -66,9 +60,11 @@ export const Header: React.FC = () => {
         <Link href={`/`}>
           <Image src="/logo.svg" alt="logo" width={220} height={35} />
         </Link>
-        <p className="text-black text-base leading-loose text-lg">
-          Онлайн-тренировки для занятий дома
-        </p>
+        {!shouldHideParagraph && (
+          <p className="text-black text-base leading-loose text-lg">
+            Онлайн-тренировки для занятий дома
+          </p>
+        )}
       </div>
       {user.email ? (
         <div className="relative">
@@ -120,7 +116,6 @@ export const Header: React.FC = () => {
           handleLoginClick={handleLoginClick}
         />
       )}
-      {showModal && <PopUp message={modalMessage} />}
       {modal.isOpen && <PopUp message={modal.message} />}
     </header>
   );

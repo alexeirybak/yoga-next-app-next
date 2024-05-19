@@ -1,12 +1,22 @@
-import React from 'react';
+"use client"
+
+import { useContext } from "react";
+import { WorkoutContext } from "@/app/context/workoutContext";
 
 interface ProgressCardProps {
   setProgressModal: (value: boolean) => void;
+  courseName: string
 }
 
-export const ProgressCard: React.FC<ProgressCardProps> = ({ setProgressModal }) => {
+export const ProgressCard: React.FC<ProgressCardProps> = ({
+  setProgressModal,
+  courseName,
+}) => {
+
+  const { setCourseByWorkout } = useContext(WorkoutContext);
   const handleProgress = () => {
     setProgressModal(true);
+    setCourseByWorkout(courseName)
   };
 
   return (

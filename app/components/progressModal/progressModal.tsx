@@ -22,13 +22,13 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
 }) => {
   const [workoutNames, setWorkoutNames] = useState<WorkoutData[]>([]);
   const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
-
+  
   const handleProgress = () => {
     setProgressModal(false);
   };
 
-  const handleWorkoutSelect = (workoutId: string) => {
-    setSelectedWorkout(workoutId);
+  const handleWorkoutSelect = (workout: string) => {
+    setSelectedWorkout(workout);
   };
 
   useEffect(() => {
@@ -36,13 +36,12 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
       const fetchedWorkouts: WorkoutData[] = [];
 
       for (const workout of workouts) {
-        console.log(workout.name);
         const workoutRef = ref(db, `workouts/${workout.name}`);
         const snapshot = await get(workoutRef);
         if (snapshot.exists()) {
           const data = snapshot.val();
           fetchedWorkouts.push({
-            _id: workout._id,
+            _id: data._id,
             name: data.name,
             details: data.details,
           });
@@ -92,7 +91,7 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
             {selectedWorkout ? (
               <Link
                 href={`/pages/workouts/${selectedWorkout}`}
-                className="flex justify-center text-lg bg-custom-lime hover:bg-[#c6ff00] active:bg-black active:text-white py-4 px-[26px] rounded-[46px] w-[283px] h-[52px] leading-110"
+                className="flex justify-center text-lg bg-custom-lime hover:bg-[#c6ff00] active:bg-black active:text-white py-4 px-[26px] rounded-[46px] w-[283px] h-[52px] leading-110 transition-colors duration-300 ease-in-out"
               >
                 Начать
               </Link>
