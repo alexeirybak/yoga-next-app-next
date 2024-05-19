@@ -1,9 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { EnterButtonFromCourses } from "../components/enterButtonFromCourses/EnterFromCourses";
+import { EnterButtonFromCourses } from "@/app/components/enterButtonFromCourses/EnterFromCourses";
 import { useEffect, useState } from "react";
-import { db } from "../firebase";
+import { db } from "@/app/firebase";
 import { ref, onValue } from "firebase/database";
 import styles from "./CourseDescription.module.css";
 
@@ -46,7 +46,7 @@ export default function CourseDescription({ params: { id } }: Props) {
     <div>
       <h1
         className={`max-w-[1440px] h-[310px] mx-auto pl-[40px] pt-[40px] mb-[60px] rounded-3xl text-6xl text-white ${styles.bgTitle}`}
-        style={{ backgroundImage: `url(largeImg${courseData._id}.jpg)` }}
+        style={{ backgroundImage: `url(./../../largeImg${courseData._id}.jpg)` }}
       >
         {courseData.name}
       </h1>

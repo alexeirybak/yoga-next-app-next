@@ -115,7 +115,7 @@ export const NewPassword: React.FC<NewPasswordProps> = ({
             />
             <input
               type="password"
-              placeholder="Подтвердите новый пароль"
+              placeholder="Подтвердите пароль"
               value={confirmNewPassword}
               onChange={(e) => setConfirmNewPassword(e.target.value)}
               className="outline-none w-full rounded-lg h-[52px] border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] text-lg leading-110"

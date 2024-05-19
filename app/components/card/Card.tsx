@@ -11,8 +11,10 @@ import { ProgressModal } from "../progressModal/progressModal";
 import { ProgressCard } from "../progressCard/ProgressCard";
 import { useDispatch } from "react-redux";
 import { openModal, closeModal } from "@/app/store/slices/modalSlice";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "@/app/hooks/use-auth";
+import { db } from "@/app/firebase";
+import { ref, onValue } from "firebase/database";
 import "../../globals.css";
 
 export type CardData = {
@@ -24,6 +26,11 @@ type CardProps = {
   cardData: CardData;
   isSubscribed?: boolean;
   onCourseDeleted: (courseId: string) => void;
+};
+
+type WorkoutData = {
+  _id: string;
+  name: string;
 };
 
 export const Card: React.FC<CardProps> = ({
@@ -42,6 +49,30 @@ export const Card: React.FC<CardProps> = ({
   > | null>(null);
   const { isAuth } = useAuth();
   const [progressModal, setProgressModal] = useState(false);
+  const [workouts, setWorkouts] = useState<WorkoutData[]>([]);
+
+  useEffect(() => {
+    const courseId = parseInt(cardData._id, 10) - 1;
+    const courseRef = ref(db, `courses/${courseId}`);
+    const getCoursesId = onValue(courseRef, (snapshot) => {
+      const courseData = snapshot.val();
+      if (courseData && courseData.workout) {
+        const workouts: WorkoutData[] = [];
+        for (const key in courseData.workout) {
+          if (courseData.workout.hasOwnProperty(key)) {
+            workouts.push({ _id: key, name: courseData.workout[key] });
+          }
+        }
+        setWorkouts(workouts);
+      } else {
+        setWorkouts([]);
+      }
+    });
+
+    return () => {
+      getCoursesId();
+    };
+  }, [cardData._id]);
 
   const handleSubscribeClick = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -86,6 +117,8 @@ export const Card: React.FC<CardProps> = ({
     setShowUnsubscribeConfirm(false);
   };
 
+  console.log(workouts)
+
   return (
     <div
       className={`flex flex-col relative bg-white rounded-3xl card pb-[15px]`}
@@ -108,7 +141,7 @@ export const Card: React.FC<CardProps> = ({
             />
           </button>
         ) : (
-          <Link href={`/${cardData._id}`}>
+          <Link href={`/pages/courseDescription/${cardData._id}`}>
             <Image
               src={`/smallImg${cardData._id}.jpg`}
               alt={cardData.name}
@@ -126,7 +159,12 @@ export const Card: React.FC<CardProps> = ({
           {isProfilePage && (
             <ProgressCard setProgressModal={setProgressModal} />
           )}
-          {progressModal && <ProgressModal setProgressModal={setProgressModal}/>}
+          {progressModal && (
+            <ProgressModal
+              setProgressModal={setProgressModal}
+              workouts={workouts}
+            />
+          )}
         </div>
       </div>
 

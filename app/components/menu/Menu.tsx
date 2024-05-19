@@ -42,7 +42,7 @@ export const TopMenu: React.FC<TopMenuProps> = ({
       <p className="mb-[34px] text-[#999]">{userEmail}</p>
       <div className="flex flex-col">
         <Link
-          href={`/components/profile/${userId}`}
+          href={`/pages/profile/${userId}`}
           onClick={() => setIsOpenMenu(false)}
           className="bg-custom-lime hover:bg-[#c6ff00] active:bg-black active:text-white transition-colors duration-300 ease-in-out rounded-[30px] px-[26px] py-4 text-center mb-2.5"
         >

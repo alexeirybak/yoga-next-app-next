@@ -17,7 +17,7 @@
 }
 
 .bgLine {
-  background-image: url("../../public/line.png");
+  background-image: url("../../../../public/line.png");
   background-size: 670px 391px;
   background-position: bottom -60px right 30px;
 }

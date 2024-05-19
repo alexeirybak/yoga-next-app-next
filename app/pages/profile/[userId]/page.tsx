@@ -3,16 +3,16 @@
 import { useCallback, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
-import { NewPassword } from "../../changePassword/ChangePassword";
+import { NewPassword } from "@/app/components/changePassword/ChangePassword";
 import { removeUser } from "@/app/store/slices/userSlice";
 import { useRouter } from "next/navigation";
 import { getDatabase, ref, onValue } from "firebase/database";
 import { getAuth, signOut } from "firebase/auth";
 import Image from "next/image";
-import { Card } from "../../card/Card";
+import { Card } from "@/app/components/card/Card";
 import Link from "next/link";
 import { useAuth } from "@/app/hooks/use-auth";
-import styles from "../../header/Header.module.css";
+import styles from "./../../../components/header/Header.module.css";
 import "../../../globals.css";
 
 type CardData = {
