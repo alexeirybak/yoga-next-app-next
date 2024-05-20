@@ -6,16 +6,25 @@ import { Card } from "./components/card/Card";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import { db } from "./firebase";
 import { ref, onValue } from "firebase/database";
-import './globals.css';
+import "./globals.css";
+
+interface Course {
+  _id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
+  name: string;
+}
 
 export default function Home() {
-  const [courses, setCourses] = useState([]);
+  const [courses, setCourses] = useState<Course[]>([]);
 
   useEffect(() => {
     const coursesRef = ref(db, "courses");
     const unsubscribe = onValue(coursesRef, (snapshot) => {
       const data = snapshot.val();
-      setCourses(data);
+      const coursesData: Course[] = Object.values(data);
+      setCourses(coursesData);
     });
 
     return () => {
@@ -49,10 +58,17 @@ export default function Home() {
         >
           {courses &&
             courses.map(
-              (cardData: any) =>
-                cardData && <Card key={cardData._id} cardData={cardData} isSubscribed={false} onCourseDeleted={function (): void {
-                  throw new Error("Function not implemented.");
-                } }/>
+              (cardData) =>
+                cardData && (
+                  <Card
+                    key={cardData._id}
+                    cardData={cardData}
+                    isSubscribed={false}
+                    onCourseDeleted={function (): void {
+                      throw new Error("Function not implemented.");
+                    }}
+                  />
+                )
             )}
         </div>
       </div>
