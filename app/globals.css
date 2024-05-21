@@ -70,5 +70,52 @@ main {
   flex-wrap: wrap;
 }
 
+.listMenuScroll::-webkit-scrollbar {
+  width: 6px;
+  height: 116px;
+}
 
+.listMenuScroll::-webkit-scrollbar-track {
+  background-color: #f7f7f7;
+}
 
+.listMenuScroll::-webkit-scrollbar-thumb {
+  background-color: black;
+  border-radius: 10px;
+}
+
+.btnGreen {
+  font-size: 18px;
+  color: black;
+  text-align: center;
+  background-color: #bcec30;
+  line-height: 110%;
+  transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
+}
+
+.btnGreen:hover {
+  background-color: #c6ff00;
+}
+
+.btnGreen:active {
+  background-color: black;
+  color: white;
+}
+
+.btnGray {
+  font-size: 18px;
+  color: black;
+  text-align: center;
+  background-color: white;
+  line-height: 110%;
+  transition: background-color 300ms ease-in-out, color 300ms ease-in-out;
+  border: 1px solid #000;
+}
+
+.btnGray:hover {
+  background-color: #f7f7f7;
+}
+
+.btnGray:active {
+  background-color: #e9eced;
+}

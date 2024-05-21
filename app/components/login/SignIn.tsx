@@ -160,14 +160,14 @@ export const Login: React.FC<LoginProps> = ({
               className={`w-full h-[52px] py-4 px-[26px] text-lg rounded-[46px] transition-colors duration-300 leading-110 ease-in-out ${
                 isEntering
                   ? "bg-white text-[#999] border-[1px] border-[#999]"
-                  : "bg-custom-lime hover:bg-[#c6ff00] active:bg-black text-black active:text-white"
+                  : "btnGreen"
               }`}
             >
               {isEntering ? "Входим..." : "Войти"}
             </button>
             <button
               onClick={handleRegisterClick}
-              className="w-full rounded-[46px] h-[52px] text-lg border-[1px] border-black leading-110 hover:bg-[#f7f7f7] active:bg-[#e9eced] transition-colors duration-300 ease-in-out"
+              className="w-full rounded-[46px] h-[52px] btnGray"
             >
               Зарегистрироваться
             </button>

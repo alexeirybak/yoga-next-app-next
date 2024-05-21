@@ -1,11 +1,9 @@
-"use client";
-
 import Image from "next/image";
 import { EnterButtonFromCourses } from "@/app/components/enterButtonFromCourses/EnterFromCourses";
-import { useEffect, useState } from "react";
-import { db } from "@/app/firebase";
-import { ref, onValue } from "firebase/database";
+import { getDescriptionById } from "@/app/Api/getDescriptionById";
 import styles from "./CourseDescription.module.css";
+import { Metadata } from "next";
+
 
 type Props = {
   params: {
@@ -13,30 +11,39 @@ type Props = {
   };
 };
 
-type CourseData = {
-  _id: number;
-  name: string;
-  image: string;
-  reasons: string[];
-  directions: string[];
-  description: string[];
-};
-
-export default function CourseDescription({ params: { id } }: Props) {
+export async function generateMetadata({
+  params: { id },
+}: Props): Promise<Metadata | { notFound: true }> {
   const parsedId = parseInt(id, 10) - 1;
-  const [courseData, setCourseData] = useState<CourseData | null>(null);
+  const courseDescriptionData = await getDescriptionById(parsedId);
 
-  useEffect(() => {
-    const coursesRef = ref(db, `courses/${parsedId}`);
-    const unsubscribe = onValue(coursesRef, (snapshot) => {
-      const data = snapshot.val();
-      setCourseData(data);
-    });
+  if (parsedId > 5) {
+    return { notFound: true };
+  }
 
-    return () => {
-      unsubscribe();
+  const courseData = courseDescriptionData;
+
+  if (!courseData) {
+    return {
+      title: "Курс не найден",
+      description: "Запрашиваемый курс не существует или временно недоступен.",
     };
-  }, [parsedId]);
+  }
+
+  return {
+    title: courseData.name,
+    description: courseData.description.join(" "),
+  };
+}
+
+export default async function CourseDescription({ params: { id } }: Props) {
+  const parsedId = parseInt(id, 10) - 1;
+
+  if (parsedId > 4) {
+    return <p>Запрашиваемый курс не существует или временно недоступен.</p>;
+  }
+
+  const courseData = await getDescriptionById(parsedId);
 
   if (courseData === null) {
     return null;
@@ -46,7 +53,9 @@ export default function CourseDescription({ params: { id } }: Props) {
     <div>
       <h1
         className={`max-w-[1440px] h-[310px] mx-auto pl-[40px] pt-[40px] mb-[60px] rounded-3xl text-6xl text-white ${styles.bgTitle}`}
-        style={{ backgroundImage: `url(./../../largeImg${courseData._id}.jpg)` }}
+        style={{
+          backgroundImage: `url(./../../largeImg${courseData._id}.jpg)`,
+        }}
       >
         {courseData.name}
       </h1>
@@ -97,12 +106,17 @@ export default function CourseDescription({ params: { id } }: Props) {
                 Начните путь к новому телу
               </div>
               <ul className="list-disc pl-5 text-2xl">
-                {courseData.description.map((benefit: string, indexBen: number) => (
-                  <li key={indexBen}>{benefit}</li>
-                ))}
+                {courseData.description.map(
+                  (benefit: string, indexBen: number) => (
+                    <li key={indexBen}>{benefit}</li>
+                  )
+                )}
               </ul>
             </div>
-            <EnterButtonFromCourses courseId={courseData._id.toString()} courseName={courseData.name} />
+            <EnterButtonFromCourses
+              courseId={courseData._id.toString()}
+              courseName={courseData.name}
+            />
           </div>
           <Image
             src="/man.png"

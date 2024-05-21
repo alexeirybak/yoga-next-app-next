@@ -6,6 +6,7 @@ import { Card } from "./components/card/Card";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import { db } from "./firebase";
 import { ref, onValue } from "firebase/database";
+import { getCoursesData } from "./Api/getCourses";
 import "./globals.css";
 
 interface Course {
@@ -20,16 +21,15 @@ export default function Home() {
   const [courses, setCourses] = useState<Course[]>([]);
 
   useEffect(() => {
-    const coursesRef = ref(db, "courses");
-    const unsubscribe = onValue(coursesRef, (snapshot) => {
-      const data = snapshot.val();
-      const coursesData: Course[] = Object.values(data);
-      setCourses(coursesData);
-    });
-
-    return () => {
-      unsubscribe();
+    const fetchCourses = async () => {
+      const coursesRef = ref(db, "courses");
+      onValue(coursesRef, (snapshot) => {
+        const data = snapshot.val();
+        setCourses(data);
+      });
     };
+
+    fetchCourses();
   }, []);
 
   return (
@@ -58,7 +58,7 @@ export default function Home() {
         >
           {courses &&
             courses.map(
-              (cardData) =>
+              (cardData: any) =>
                 cardData && (
                   <Card
                     key={cardData._id}

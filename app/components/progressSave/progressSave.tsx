@@ -1,10 +1,10 @@
-import React from 'react';
+import "../../globals.css";
 
 interface Exercise {
-    name: string;
-    quantity: number;
-    made: number;
-  }
+  name: string;
+  made: number;
+  quantity: number;
+}
 
 interface ProgressModalProps {
   exercises: Exercise[];
@@ -25,21 +25,15 @@ export const ProgressSave: React.FC<ProgressModalProps> = ({
     <div className="modalOverlay">
       <div className="modalContentProgress w-[426px] h-[596px]">
         <div className="relative">
-          <button
-            className="text-2xl w-5 absolute right-0"
-            onClick={onClose}
-          >
+          <button className="text-2xl w-5 absolute right-0" onClick={onClose}>
             &#10060;
           </button>
           <h2 className="text-[32px] mb-12">Мой прогресс</h2>
-          <div className="max-h-[347px] overflow-y-auto">
+          <ul className="max-h-[347px] overflow-y-auto listMenuScroll pr-5">
             {exercises.map((exercise: Exercise) => (
-              <>
-                <div
-                  key={exercise.name}
-                  className="text-lg leading-110 mb-2.5"
-                >
-                  Сколько раз вы сделали “{exercise.name}”
+              <li key={exercise.name}>
+                <div className="text-lg leading-110 mb-2.5">
+                  Сколько раз вы сделали “{exercise.name}”?
                 </div>
                 <label htmlFor={exercise.name} />
                 <input
@@ -52,16 +46,16 @@ export const ProgressSave: React.FC<ProgressModalProps> = ({
                       parseInt(e.target.value, 10)
                     )
                   }
-                  placeholder="0"
+                  placeholder={(exerciseQuantities[exercise.name] || 0).toString()}
                   className="border-[1px] border-[#d0cece] rounded-lg px-4 py-[18px] w-full h-[52px] mb-5"
                 />
-              </>
+              </li>
             ))}
-          </div>
+          </ul>
 
           <button
             onClick={onSaveProgress}
-            className="mt-[14px] w-full text-lg leading-110 rounded-[46px] px-[26px] py-4 bg-custom-lime hover:bg-[#c6ff00] active:bg-black active:text-white transition-colors duration-300 ease-in-out"
+            className="btnGreen mt-[14px] w-full rounded-[46px] px-[26px] py-4"
           >
             Сохранить
           </button>

@@ -27,7 +27,7 @@ export const ProgressCard: React.FC<ProgressCardProps> = ({
       </div>
       <button
         onClick={handleProgress}
-        className="bg-custom-lime hover:bg-[#c6ff00] active:bg-black active:text-white py-4 px-[26px] rounded-[46px] w-[300px] h-[52px] leading-110"
+        className="btnGreen py-4 px-[26px] rounded-[46px] w-[300px] h-[52px]"
       >
         Продолжить
       </button>

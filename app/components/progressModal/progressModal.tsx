@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Image from "next/image";
 import { ref, get } from "firebase/database";
 import { db } from "../../firebase";
 import "../../globals.css";
@@ -65,7 +64,7 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
             &#10060;
           </button>
           <div className="text-[32px] mb-5">Выберите тренировку</div>
-          <ul className="flex flex-col mb-[35px] gap-y-5 max-h-[360px] overflow-y-auto">
+          <ul className="flex flex-col mb-[35px] gap-y-5 max-h-[360px] overflow-y-auto listMenuScroll pr-5">
             {workoutNames.map((workout) => (
               <li
                 key={workout._id}
@@ -77,7 +76,7 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
                   onChange={() => handleWorkoutSelect(workout._id)}
                 />
                 <button className="flex flex-col">
-                  <div className="text-[24px] leading-110 my-2.5">
+                  <div className="text-[24px] leading-110 my-2.5 text-left">
                     {workout.name}
                   </div>
                   {workout.details && (
@@ -91,14 +90,14 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
             {selectedWorkout ? (
               <Link
                 href={`/pages/workouts/${selectedWorkout}`}
-                className="flex justify-center text-lg bg-custom-lime hover:bg-[#c6ff00] active:bg-black active:text-white py-4 px-[26px] rounded-[46px] w-[283px] h-[52px] leading-110 transition-colors duration-300 ease-in-out"
+                className="btnGreen flex justify-center py-4 px-[26px] rounded-[46px] w-[283px] h-[52px]"
               >
                 Начать
               </Link>
             ) : (
               <button
                 disabled
-                className="text-lg bg-gray-300 text-gray-500 py-4 px-[26px] rounded-[46px] w-[283px] h-[52px] leading-110 cursor-not-allowed"
+                className="text-lg border-[#999] border-[1px] text-[#999] py-4 px-[26px] rounded-[46px] w-[283px] h-[52px] leading-110 cursor-not-allowed"
               >
                 Начать
               </button>

@@ -93,13 +93,13 @@ const UserProfile: React.FC = () => {
           <div className="flex flex-row gap-x-2.5">
             <button
               onClick={() => setShowChangePasswordForm(true)}
-              className="bg-custom-lime hover:bg-[#c6ff00] active:bg-black active:text-white transition-colors duration-300 ease-in-out py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
+              className="btnGreen py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
             >
               Изменить пароль
             </button>
             <button
               onClick={handleLogout}
-              className="border-[1px] border-black py-4 px-[26px] rounded-[46px] w-[210px] h-[52px] hover:bg-[#f7f7f7] active:bg-[#e9eced] transition-colors duration-300 ease-in-out"
+              className="btnGray py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
             >
               Выйти
             </button>

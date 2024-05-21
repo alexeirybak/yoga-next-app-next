@@ -33,7 +33,7 @@ export const EnterButtonFromCourses = ({ courseId, courseName }: Props) => {
 
   return (
     <button
-      className="bg-custom-lime hover:bg-[#c6ff00] active:bg-black active:text-white transition-colors duration-300 ease-in-out h-14 rounded-[46px] flex items-center justify-center text-lg leading-110"
+      className="btnGreen h-14 rounded-[46px] flex items-center justify-center"
       onClick={handleLoginClick}
     >
       {isAuth ? "Добавить курс" : "Войдите, чтобы добавить курс"}

@@ -21,7 +21,7 @@ export const ModalConfirm: React.FC<ModalConfirmProps> = ({
             Да
           </button>
           <button
-            className="bg-custom-lime hover:bg-[#c6ff00] active:bg-black text-black active:text-white p-2 rounded-[12px] w-[100px]"
+            className="btnGreen p-2 rounded-[12px] w-[100px]"
             onClick={onCancel}
           >
             Нет

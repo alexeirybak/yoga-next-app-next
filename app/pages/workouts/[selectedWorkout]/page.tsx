@@ -1,10 +1,9 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState, useContext, useCallback, useMemo } from "react";
 import { db } from "@/app/firebase";
 import { ref, onValue, update } from "firebase/database";
-import { useContext } from "react";
 import { WorkoutContext } from "@/app/context/workoutContext";
 import { openModal, closeModal } from "@/app/store/slices/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -28,6 +27,7 @@ export default function Workout() {
   const { courseByWorkout } = useContext(WorkoutContext);
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
+  const [hasProgress, setHasProgress] = useState(false);
   const userId = user.id || 0;
 
   const fetchWorkoutData = useCallback(async () => {
@@ -45,16 +45,43 @@ export default function Workout() {
     if (id && user && user.id) {
       fetchWorkoutData();
     }
-  }, [dispatch, id, user, fetchWorkoutData]);
+  }, [id, user, fetchWorkoutData]);
+
+  const checkProgress = useMemo(() => {
+    return (dataWorkout: any) => {
+      if (dataWorkout && dataWorkout[userId] && dataWorkout[userId].progress) {
+        return dataWorkout[userId].progress.exercises.some(
+          (exercise: any) => exercise.made > 0
+        );
+      }
+      return false;
+    };
+  }, [userId]);
 
   useEffect(() => {
-    if (id) {
-      const workoutRef = ref(db, `workouts/${id}/${user.id}/progress/`);
-      onValue(workoutRef, (snapshot) => {
-        const data = snapshot.val();
-      });
+    if (workoutData && userId) {
+      const hasMadeProgress = checkProgress(workoutData);
+      setHasProgress(hasMadeProgress);
     }
-  }, [user.id, id]);
+  }, [workoutData, userId, checkProgress]);
+
+  useEffect(() => {
+    if (workoutData && userId) {
+      const workoutRef = ref(db, `workouts/${id}/${userId}/progress/`);
+      const unsubscribe = onValue(workoutRef, (snapshot) => {
+        const data = snapshot.val();
+        const updatedWorkoutData = {
+          ...workoutData,
+          [userId]: { progress: data },
+        };
+        setWorkoutData(updatedWorkoutData);
+      });
+
+      return () => {
+        unsubscribe();
+      };
+    }
+  }, [userId, id, workoutData]);
 
   if (!workoutData) {
     return null;
@@ -97,10 +124,19 @@ export default function Workout() {
   };
 
   const updateExerciseQuantity = (exerciseName: string, quantity: number) => {
-    setExerciseQuantities((prevQuantities: any) => ({
-      ...prevQuantities,
-      [exerciseName]: quantity,
-    }));
+    if (workoutData && workoutData.exercises) {
+      const exercise = workoutData.exercises.find(
+        (ex: Exercise) => ex.name === exerciseName
+      );
+      if (exercise) {
+        const newQuantity = Math.min(quantity, exercise.quantity);
+        setExerciseQuantities((prevQuantities: any) => ({
+          ...prevQuantities,
+          [exerciseName]: newQuantity,
+        }));
+        console.log(exerciseQuantities)
+      }
+    }
   };
 
   return (
@@ -132,7 +168,10 @@ export default function Workout() {
                 const progressItem = userProgress?.exercises[index];
 
                 return (
-                  <li key={index} className="w-[320px]">
+                  <li
+                    key={index}
+                    className="w-[320px] flex flex-col justify-between"
+                  >
                     <div className="">
                       {exItem.name} ({exItem.quantity} повторений)
                     </div>
@@ -154,9 +193,9 @@ export default function Workout() {
           )}
           <button
             onClick={() => setProgressModal(true)}
-            className="text-lg leading-110 rounded-[46px] px-[26px] py-4 bg-custom-lime hover:bg-[#c6ff00] active:bg-black active:text-white transition-colors duration-300 ease-in-out"
+            className="btnGreen rounded-[46px] px-[26px] py-4"
           >
-            Обновить свой прогресс
+            {hasProgress ? "Обновить свой прогресс" : "Заполнить свой прогресс"}
           </button>
         </div>
       </div>
