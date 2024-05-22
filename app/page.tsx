@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Card } from "./components/card/Card";
 import ScrollToTopButton from "./components/ScrollToTopButton";
-import { db } from "./firebase";
-import { ref, onValue } from "firebase/database";
 import { getCoursesData } from "./Api/getCourses";
 import "./globals.css";
 
@@ -22,18 +20,19 @@ export default function Home() {
 
   useEffect(() => {
     const fetchCourses = async () => {
-      const coursesRef = ref(db, "courses");
-      onValue(coursesRef, (snapshot) => {
-        const data = snapshot.val();
-        setCourses(data);
-      });
+      try {
+        const coursesData = await getCoursesData();
+        setCourses(coursesData);
+      } catch (error) {
+        console.error('Ошибка при получении данных о курсах:', error);
+      }
     };
 
     fetchCourses();
   }, []);
 
   return (
-    <div className="max-w-[1440px] mx-{{{auto ">
+    <div className="max-w-[1440px] mx-auto">
       <div className="flex flex-row justify-between gap-x-5">
         <div className="text-5xl font-bold max-w-[860px] mb-[50px]">
           Начните заниматься спортом и улучшите качество своей жизни
@@ -53,23 +52,17 @@ export default function Home() {
       </div>
 
       <div>
-        <div
-          className={`flex flex-wrap gap-y-10 justify-between mx-auto cards`}
-        >
-          {courses &&
-            courses.map(
-              (cardData: any) =>
-                cardData && (
-                  <Card
-                    key={cardData._id}
-                    cardData={cardData}
-                    isSubscribed={false}
-                    onCourseDeleted={function (): void {
-                      throw new Error("Function not implemented.");
-                    }}
-                  />
-                )
-            )}
+        <div className="flex flex-wrap gap-y-10 justify-between mx-auto cards">
+          {courses.map((cardData) => (
+            <Card
+              key={cardData._id}
+              cardData={cardData}
+              isSubscribed={false}
+              onCourseDeleted={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+            />
+          ))}
         </div>
       </div>
       <ScrollToTopButton />

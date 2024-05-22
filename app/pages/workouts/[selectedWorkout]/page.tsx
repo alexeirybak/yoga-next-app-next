@@ -27,6 +27,7 @@ export default function Workout() {
   const { courseByWorkout } = useContext(WorkoutContext);
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
+  const courseId = useSelector((state: RootState) => state.course.courseId);
   const [hasProgress, setHasProgress] = useState(false);
   const userId = user.id || 0;
 
@@ -67,8 +68,8 @@ export default function Workout() {
 
   useEffect(() => {
     if (workoutData && userId) {
-      const workoutRef = ref(db, `workouts/${id}/${userId}/progress/`);
-      const unsubscribe = onValue(workoutRef, (snapshot) => {
+      const workoutRef = ref(db, `users/${userId}/progress/${courseId}/${id}`);
+      const recordWorkout = onValue(workoutRef, (snapshot) => {
         const data = snapshot.val();
         const updatedWorkoutData = {
           ...workoutData,
@@ -78,10 +79,10 @@ export default function Workout() {
       });
 
       return () => {
-        unsubscribe();
+        recordWorkout();
       };
     }
-  }, [userId, id, workoutData]);
+  }, [userId, id, workoutData, courseId]);
 
   if (!workoutData) {
     return null;
@@ -89,7 +90,7 @@ export default function Workout() {
 
   const handleSaveProgress = async () => {
     if (user && user.id && id) {
-      const userRef = ref(db, `workouts/${id}/${user.id}/progress/`);
+      const userRef = ref(db, `users/${userId}/progress/${courseId}/${id}`);
 
       const exercisesData = workoutData.exercises.map((exercise: Exercise) => {
         const exerciseName = exercise.name;
@@ -134,7 +135,6 @@ export default function Workout() {
           ...prevQuantities,
           [exerciseName]: newQuantity,
         }));
-        console.log(exerciseQuantities)
       }
     }
   };

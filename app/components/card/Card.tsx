@@ -53,9 +53,11 @@ export const Card: React.FC<CardProps> = ({
   const [progressModal, setProgressModal] = useState(false);
   const [workouts, setWorkouts] = useState<WorkoutData[]>([]);
   const [courseName, setCourseName] = useState("");
+  const [courseId, setCourseId] = useState<number | null>(null);
 
   useEffect(() => {
     const courseId = parseInt(cardData._id, 10) - 1;
+    setCourseId(courseId);
     const courseRef = ref(db, `courses/${courseId}`);
     const getCoursesId = onValue(courseRef, (snapshot) => {
       const courseData = snapshot.val();
@@ -158,10 +160,11 @@ export const Card: React.FC<CardProps> = ({
         <div className="flex flex-col mx-auto px-[30px]">
           <div className="text-3xl mb-5">{cardData.name}</div>
           <CourseInfo />
-          {isProfilePage && (
+          {isProfilePage && courseId !== null && (
             <ProgressCard
               setProgressModal={setProgressModal}
               courseName={courseName}
+              courseId={courseId}
             />
           )}
           {progressModal && (
