@@ -6,12 +6,13 @@ import { RootState } from "@/app/store";
 import { NewPassword } from "@/app/components/changePassword/ChangePassword";
 import { removeUser } from "@/app/store/slices/userSlice";
 import { useRouter } from "next/navigation";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getSubscribedCourses } from "@/app/Api/getSubscribedCourses";
 import { getAuth, signOut } from "firebase/auth";
 import Image from "next/image";
 import { Card } from "@/app/components/card/Card";
 import Link from "next/link";
 import { useAuth } from "@/app/hooks/use-auth";
+import { databaseURL } from "@/app/firebase";
 import styles from "./../../../components/header/Header.module.css";
 import "../../../globals.css";
 
@@ -41,25 +42,24 @@ const UserProfile: React.FC = () => {
   // }, [isAuth, router]);
 
   useEffect(() => {
-    if (user && user.id) {
-      const db = getDatabase();
-      const userRef = ref(db, `users/${user.id}/courses`);
-
-      const unsubscribe = onValue(userRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
-          const courseData: CardData[] = Object.entries(data).map(
-            ([courseId, course]) => ({
-              _id: courseId,
-              name: (course as any).name,
-            })
-          );
+    const fetchSubscribedCourses = async () => {
+      try {
+        if (user && user.id) {
+          const data = await getSubscribedCourses(user.id);
+          const courseData: CardData[] = data
+            .filter((course: number) => course !== null)
+            .map((course: { courseId: number; name: string }) => ({
+              _id: course.courseId,
+              name: course.name,
+            }));
           setSubscriptions(courseData);
         }
-      });
+      } catch (error) {
+        console.error("Error fetching courses:", error);
+      }
+    };
 
-      return () => unsubscribe();
-    }
+    fetchSubscribedCourses();
   }, [user]);
 
   const handleLogout = async () => {
