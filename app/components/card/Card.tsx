@@ -171,6 +171,7 @@ export const Card: React.FC<CardProps> = ({
             <ProgressModal
               setProgressModal={setProgressModal}
               workouts={workouts}
+              courseId={courseId}
             />
           )}
         </div>

@@ -16,18 +16,22 @@ type WorkoutData = {
 interface ProgressModalProps {
   setProgressModal: (value: boolean) => void;
   workouts: WorkoutData[];
+  courseId: number;
 }
 
 export const ProgressModal: React.FC<ProgressModalProps> = ({
   setProgressModal,
   workouts,
+  courseId,
 }) => {
   const [workoutNames, setWorkoutNames] = useState<WorkoutData[]>([]);
   const [selectedWorkout, setSelectedWorkout] = useState<string | null>(null);
+  const [workoutStatus, setWorkoutStatus] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [activeWorkout, setActiveWorkout] = useState(null);
   const user = useSelector((state: RootState) => state.user);
   const userId = user.id || 0;
-
 
   const handleProgress = () => {
     setProgressModal(false);
@@ -38,33 +42,45 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
   };
 
   useEffect(() => {
-    const fetchWorkoutNames = async () => {
-      const fetchedWorkouts = [];
-  
+    const fetchWorkoutStatus = async () => {
+      const fetchedWorkouts: WorkoutData[] = [];
+
       for (const workout of workouts) {
-        try {
-          const response = await fetch(`https://fitness-54b16-default-rtdb.europe-west1.firebasedatabase.app/workouts/${workout.name}.json`);
-          if (!response.ok) {
-            throw new Error('Ошибка при загрузке данных тренировки');
-          }
-          const data = await response.json();
-          console.log(data);
-          
+        const workoutRef = ref(db, `workouts/${workout.name}`);
+        const snapshot = await get(workoutRef);
+        if (snapshot.exists()) {
+          const data = snapshot.val();
           fetchedWorkouts.push({
             _id: data._id,
             name: data.name,
             details: data.details,
           });
-        } catch (error) {
-          console.error('Ошибка при получении данных тренировки:', error);
+
+          const userProgressRef = ref(
+            db,
+            `users/${userId}/progress/${courseId}/${workout.name}/exercises`
+          );
+
+          const userProgressSnapshot = await get(userProgressRef);
+          if (userProgressSnapshot.exists()) {
+            const exercises = userProgressSnapshot.val();
+            const allExercisesDone = exercises.every(
+              (exercise) => exercise.done
+            );
+            setWorkoutStatus((prevStatus) => ({
+              ...prevStatus,
+              [workout._id]: allExercisesDone,
+            }));
+          }
         }
       }
-  
       setWorkoutNames(fetchedWorkouts);
     };
-  
-    fetchWorkoutNames();
-  }, [workouts]); 
+
+    fetchWorkoutStatus();
+  }, [workouts, userId, courseId]);
+
+  useEffect(() => {}, [workoutStatus]);
 
   const handleChoiceWorkout = (workoutId) => {
     setActiveWorkout(workoutId);
@@ -83,24 +99,30 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
           </button>
           <div className="text-[32px] mb-5">Выберите тренировку</div>
           <ul className="flex flex-col mb-[35px] gap-y-5 max-h-[360px] overflow-y-auto listMenuScroll pr-5">
-            {workoutNames.map((workout) => (
+            {workoutNames.map((workout, index) => (
               <li
-                key={workout._id}
+                key={index}
                 className={`flex flex-row gap-x-3 border-b-[1px] border-[#c4c4c4] p-[10px] w-full  ${
                   activeWorkout === workout._id ? "bg-gray-200" : ""
                 }`}
                 onClick={() => handleChoiceWorkout(workout._id)}
               >
-                <Image
-                  src={
-                    selectedWorkout === workout._id
-                      ? "/icon-check-train.svg"
-                      : "/icon-check-train.svg"
-                  }
-                  alt="Checkbox"
-                  width={20}
-                  height={20}
-                />
+                {workoutStatus[index] ? (
+                  <Image
+                    src="/icon-check-train.svg"
+                    alt="Checkbox"
+                    width={20}
+                    height={20}
+                  />
+                ) : (
+                  <Image
+                    src="/icon-check-train-no.svg"
+                    alt="Checkbox"
+                    width={20}
+                    height={20}
+                  />
+                )}
+
                 <button className="flex flex-col flex-grow">
                   <div className="text-[24px] leading-110 my-2.5 text-left">
                     {workout.name}
