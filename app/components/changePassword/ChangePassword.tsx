@@ -4,7 +4,6 @@ import Image from "next/image";
 import { MouseEventHandler, SetStateAction, useEffect, useState } from "react";
 import { validatePassword } from "@/app/services/validation";
 import { updatePassword, getAuth, User } from "firebase/auth";
-import "../../globals.css";
 
 type NewPasswordProps = {
   setShowChangePasswordForm: (value: SetStateAction<boolean>) => void;

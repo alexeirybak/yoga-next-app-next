@@ -1,13 +1,15 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Card } from "./components/card/Card";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import { getCoursesData } from "./Api/getCourses";
-import "./globals.css";
+import { Metadata } from "next";
 
-interface Course {
+export const metadata: Metadata = {
+  title: "Фитнес-курсы",
+  description: "5 видов курсов для людей всех возрастов",
+};
+
+interface CardData {
   _id: string;
   title: string;
   description: string;
@@ -15,21 +17,8 @@ interface Course {
   name: string;
 }
 
-export default function Home() {
-  const [courses, setCourses] = useState<Course[]>([]);
-
-  useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const coursesData = await getCoursesData();
-        setCourses(coursesData);
-      } catch (error) {
-        console.error('Ошибка при получении данных о курсах:', error);
-      }
-    };
-
-    fetchCourses();
-  }, []);
+export default async function Home() {
+  const courses: CardData[] = await getCoursesData();
 
   return (
     <div className="max-w-[1440px] mx-auto">
@@ -53,15 +42,8 @@ export default function Home() {
 
       <div>
         <div className="flex flex-wrap gap-y-10 justify-between mx-auto cards">
-          {courses.map((cardData) => (
-            <Card
-              key={cardData._id}
-              cardData={cardData}
-              isSubscribed={false}
-              onCourseDeleted={function (): void {
-                throw new Error("Function not implemented.");
-              }}
-            />
+          {courses.map((cardData: CardData) => (
+            <Card key={cardData._id} cardData={cardData} isSubscribed={false} />
           ))}
         </div>
       </div>

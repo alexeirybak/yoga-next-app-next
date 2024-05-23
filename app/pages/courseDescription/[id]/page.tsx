@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { EnterButtonFromCourses } from "@/app/components/enterButtonFromCourses/EnterFromCourses";
-import { getDescriptionById } from "@/app/Api/getDescriptionById";
+import { getDescriptionByCourse } from "@/app/Api/getDescriptionByCourse";
 import styles from "./CourseDescription.module.css";
 import { Metadata } from "next";
 
@@ -15,7 +15,7 @@ export async function generateMetadata({
   params: { id },
 }: Props): Promise<Metadata | { notFound: true }> {
   const parsedId = parseInt(id, 10) - 1;
-  const courseDescriptionData = await getDescriptionById(parsedId);
+  const courseDescriptionData = await getDescriptionByCourse(parsedId);
 
   if (parsedId > 5) {
     return { notFound: true };
@@ -43,7 +43,7 @@ export default async function CourseDescription({ params: { id } }: Props) {
     return <p>Запрашиваемый курс не существует или временно недоступен.</p>;
   }
 
-  const courseData = await getDescriptionById(parsedId);
+  const courseData = await getDescriptionByCourse(parsedId);
 
   if (courseData === null) {
     return null;

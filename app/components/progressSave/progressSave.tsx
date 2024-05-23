@@ -1,5 +1,3 @@
-import "../../globals.css";
-
 interface Exercise {
   name: string;
   made: number;

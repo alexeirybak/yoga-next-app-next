@@ -153,14 +153,14 @@ export const Register: React.FC<RegisterProps> = ({
               placeholder="Логин"
               value={email}
               onChange={handleEmail}
-              className="outline-none w-full rounded-lg h-[52px] border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] text-lg leading-110"
+              className="inputSign"
             />
             <input
               type="password"
               placeholder="Пароль"
               value={password}
               onChange={handlePassword}
-              className="outline-none w-full rounded-lg h-[52px] border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] text-lg leading-110"
+              className="inputSign"
             />
 
             <input
@@ -169,8 +169,7 @@ export const Register: React.FC<RegisterProps> = ({
               value={repeatPassword}
               onChange={handleRepeatPassword}
               style={{ color: passEqual ? "green" : "#db0030" }}
-              className="outline-none w-full rounded-lg h-[52px] border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] text-lg leading-110"
-            />
+              className="inputSign"            />
           </div>
           <div className="h-[45px] my-2 text-sm">
             {error && <div className="text-[#db0030] text-center">{error}</div>}

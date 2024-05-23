@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
   const { isLoginOpen, isRegisterOpen } = useSelector(
     (state: RootState) => state.form
   );
-  const [isOpenMenu, setIsOpenMenu] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const modal = useSelector((state: RootState) => state.modal);
   const pathname = usePathname();
 
@@ -69,7 +69,7 @@ export const Header: React.FC = () => {
       {user.email ? (
         <div className="relative">
           <button
-            onClick={() => setIsOpenMenu(!isOpenMenu)}
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
             className="flex flex-row items-center"
           >
             <Image
@@ -88,10 +88,14 @@ export const Header: React.FC = () => {
               width={15}
               height={15}
               className="ml-3"
+              style={{
+                transform: isMenuOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform 0.8s ease'
+              }}
             />
           </button>
-          {isOpenMenu && (
-            <TopMenu userEmail={user.email} setIsOpenMenu={setIsOpenMenu} />
+          {isMenuOpen && (
+            <TopMenu userEmail={user.email} setIsOpenMenu={setIsMenuOpen} />
           )}
         </div>
       ) : (

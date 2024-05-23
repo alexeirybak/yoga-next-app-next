@@ -17,17 +17,19 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/app/hooks/use-auth";
 import { db } from "@/app/firebase";
 import { ref, onValue } from "firebase/database";
-import "../../globals.css";
+
 
 export type CardData = {
   _id: string;
+  title: string;
+  description: string;
+  imageUrl: string;
   name: string;
 };
 
 type CardProps = {
   cardData: CardData;
   isSubscribed?: boolean;
-  onCourseDeleted: (courseId: string) => void;
 };
 
 type WorkoutData = {
@@ -35,11 +37,7 @@ type WorkoutData = {
   name: string;
 };
 
-export const Card: React.FC<CardProps> = ({
-  cardData,
-  isSubscribed,
-  onCourseDeleted,
-}) => {
+export const Card: React.FC<CardProps> = ({ cardData, isSubscribed }) => {
   const pathname = usePathname();
   const isProfilePage = pathname.includes("/profile/");
 
@@ -104,11 +102,7 @@ export const Card: React.FC<CardProps> = ({
 
   const handleConfirmUnsubscribe = async () => {
     if (unsubscribeEvent) {
-      const message = await handleUnsubscribe(
-        unsubscribeEvent,
-        cardData,
-        onCourseDeleted
-      );
+      const message = await handleUnsubscribe(unsubscribeEvent, cardData);
       if (message) {
         dispatch(openModal(message));
         setTimeout(() => {
@@ -134,16 +128,14 @@ export const Card: React.FC<CardProps> = ({
       )}
       <div>
         {isProfilePage ? (
-          <button>
-            <Image
-              src={`/smallImg${cardData._id}.jpg`}
-              alt={cardData.name}
-              className="rounded-3xl mb-6"
-              width={360}
-              height={325}
-              title="Перейти к описанию курса"
-            />
-          </button>
+          <Image
+            src={`/smallImg${cardData._id}.jpg`}
+            alt={cardData.name}
+            className="rounded-3xl mb-6"
+            width={360}
+            height={325}
+            title={cardData.name}
+          />
         ) : (
           <Link href={`/pages/courseDescription/${cardData._id}`}>
             <Image

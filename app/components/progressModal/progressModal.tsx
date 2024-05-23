@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import { ref, get } from "firebase/database";
-import { db } from "../../firebase";
 import Link from "next/link";
 import Image from "next/image";
 import { useSelector } from "react-redux";
-import "../../globals.css";
 import { RootState } from "@/app/store";
+import { fetchWorkoutStatus } from "../connectDB/fetchWorkoutStatus";
 
 type WorkoutData = {
   _id: string;
@@ -16,7 +14,7 @@ type WorkoutData = {
 interface ProgressModalProps {
   setProgressModal: (value: boolean) => void;
   workouts: WorkoutData[];
-  courseId: number;
+  courseId: number | null;
 }
 
 export const ProgressModal: React.FC<ProgressModalProps> = ({
@@ -29,7 +27,7 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
   const [workoutStatus, setWorkoutStatus] = useState<{
     [key: string]: boolean;
   }>({});
-  const [activeWorkout, setActiveWorkout] = useState(null);
+  const [activeWorkout, setActiveWorkout] = useState<string | null>(null);
   const user = useSelector((state: RootState) => state.user);
   const userId = user.id || 0;
 
@@ -42,47 +40,22 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
   };
 
   useEffect(() => {
-    const fetchWorkoutStatus = async () => {
-      const fetchedWorkouts: WorkoutData[] = [];
-
-      for (const workout of workouts) {
-        const workoutRef = ref(db, `workouts/${workout.name}`);
-        const snapshot = await get(workoutRef);
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          fetchedWorkouts.push({
-            _id: data._id,
-            name: data.name,
-            details: data.details,
-          });
-
-          const userProgressRef = ref(
-            db,
-            `users/${userId}/progress/${courseId}/${workout.name}/exercises`
-          );
-
-          const userProgressSnapshot = await get(userProgressRef);
-          if (userProgressSnapshot.exists()) {
-            const exercises = userProgressSnapshot.val();
-            const allExercisesDone = exercises.every(
-              (exercise) => exercise.done
-            );
-            setWorkoutStatus((prevStatus) => ({
-              ...prevStatus,
-              [workout._id]: allExercisesDone,
-            }));
-          }
-        }
-      }
+    const fetchStatus = async () => {
+      const { fetchedWorkouts, workoutStatus } = await fetchWorkoutStatus(
+        workouts,
+        userId,
+        courseId
+      );
       setWorkoutNames(fetchedWorkouts);
+      setWorkoutStatus(workoutStatus);
     };
 
-    fetchWorkoutStatus();
+    fetchStatus();
   }, [workouts, userId, courseId]);
 
   useEffect(() => {}, [workoutStatus]);
 
-  const handleChoiceWorkout = (workoutId) => {
+  const handleChoiceWorkout = (workoutId: string) => {
     setActiveWorkout(workoutId);
     handleWorkoutSelect(workoutId);
   };
@@ -97,31 +70,26 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
           >
             &#10060;
           </button>
-          <div className="text-[32px] mb-5">Выберите тренировку</div>
-          <ul className="flex flex-col mb-[35px] gap-y-5 max-h-[360px] overflow-y-auto listMenuScroll pr-5">
+          <div className="text-[32px] mb-5">Выберите тренировки</div>
+          <ul className="flex flex-col mb-[35px] max-h-[360px] overflow-y-auto listMenuScroll pr-5">
             {workoutNames.map((workout, index) => (
               <li
                 key={index}
-                className={`flex flex-row gap-x-3 border-b-[1px] border-[#c4c4c4] p-[10px] w-full  ${
+                className={`flex flex-row gap-x-3 border-b-[1px] border-[#c4c4c4] px-2.5 pr-2.5 pt-5 w-full  ${
                   activeWorkout === workout._id ? "bg-gray-200" : ""
                 }`}
                 onClick={() => handleChoiceWorkout(workout._id)}
               >
-                {workoutStatus[index] ? (
-                  <Image
-                    src="/icon-check-train.svg"
-                    alt="Checkbox"
-                    width={20}
-                    height={20}
-                  />
-                ) : (
-                  <Image
-                    src="/icon-check-train-no.svg"
-                    alt="Checkbox"
-                    width={20}
-                    height={20}
-                  />
-                )}
+                <Image
+                  src={
+                    workoutStatus[index]
+                      ? "/icon-check-train.svg"
+                      : "/icon-check-train-no.svg"
+                  }
+                  alt="Checkbox"
+                  width={20}
+                  height={20}
+                />
 
                 <button className="flex flex-col flex-grow">
                   <div className="text-[24px] leading-110 my-2.5 text-left">

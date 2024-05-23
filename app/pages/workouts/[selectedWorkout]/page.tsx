@@ -7,7 +7,6 @@ import { ref, onValue, update } from "firebase/database";
 import { WorkoutContext } from "@/app/context/workoutContext";
 import { openModal, closeModal } from "@/app/store/slices/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
-import "../../../globals.css";
 import { RootState } from "@/app/store";
 import { getWorkoutData } from "@/app/Api/getWorkout";
 import { ProgressSave } from "@/app/components/progressSave/progressSave";

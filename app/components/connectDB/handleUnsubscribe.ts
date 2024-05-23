@@ -5,7 +5,6 @@ import { CardData } from "../card/Card";
 export const handleUnsubscribe = async (
   event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   cardData: CardData,
-  onCourseDeleted: (courseId: string) => void
 ) => {
   event.stopPropagation();
 
@@ -18,7 +17,6 @@ export const handleUnsubscribe = async (
 
     try {
       await remove(ref(db, `users/${userId}/courses/${courseId}`));
-      onCourseDeleted(courseId);
       return "Вы успешно отписались";
     } catch (error) {
       console.error("Ошибка при удалении курса:", error);

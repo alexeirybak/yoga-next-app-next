@@ -8,7 +8,6 @@ import { SetStateAction } from "react";
 import { useDispatch } from "react-redux";
 import { removeUser } from "@/app/store/slices/userSlice";
 import { getAuth, signOut } from "firebase/auth";
-import "../../globals.css";
 
 interface TopMenuProps {
   userEmail: string | null;

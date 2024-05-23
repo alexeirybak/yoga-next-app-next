@@ -12,13 +12,14 @@ import Image from "next/image";
 import { Card } from "@/app/components/card/Card";
 import Link from "next/link";
 import { useAuth } from "@/app/hooks/use-auth";
-import { databaseURL } from "@/app/firebase";
 import styles from "./../../../components/header/Header.module.css";
-import "../../../globals.css";
 
 type CardData = {
   _id: string;
   name: string;
+  description: string;
+  title: string;
+  imageUrl: string;
 };
 
 const UserProfile: React.FC = () => {
@@ -35,11 +36,11 @@ const UserProfile: React.FC = () => {
     );
   }, []);
 
-  // useEffect(() => {
-  //   if (!isAuth) {
-  //     router.push("/");
-  //   }
-  // }, [isAuth, router]);
+  useEffect(() => {
+    if (!isAuth) {
+      router.push("/");
+    }
+  }, [isAuth, router]);
 
   useEffect(() => {
     const fetchSubscribedCourses = async () => {
@@ -81,14 +82,14 @@ const UserProfile: React.FC = () => {
           src="/icon-profile.svg"
           width={197}
           height={197}
-          alt="Аватар профиля"
+          alt="Аватар профиль"
           className="pr-[33px]"
         />
         <div className="flex flex-col text-lg leading-110 gap-y-[30px]">
           <div className="text-[32px] font-medium">Имя</div>
           <div className="flex flex-col gap-y-2.5">
             {user ? `Почта: ${user.email}` : ""}
-            <p>Пароль: *...*</p>
+            <p>Профиль: *...*</p>
           </div>
           <div className="flex flex-row gap-x-2.5">
             <button
@@ -136,7 +137,6 @@ const UserProfile: React.FC = () => {
             key={cardData._id}
             cardData={cardData}
             isSubscribed={true}
-            onCourseDeleted={handleCourseDeleted}
           />
         ))}
       </div>

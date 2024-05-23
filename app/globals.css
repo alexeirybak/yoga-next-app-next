@@ -119,3 +119,14 @@ main {
 .btnGray:active {
   background-color: #e9eced;
 }
+
+.inputSign {
+  outline: none;
+  width: 100%;
+  height: 52px;
+  border: 1px solid #D0CECE;
+  border-radius: 0.5rem; 
+  padding: 1rem 1.625rem; 
+  font-size: 1.125rem; 
+  line-height: 110%;
+}
