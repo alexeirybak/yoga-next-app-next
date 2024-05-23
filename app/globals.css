@@ -24,6 +24,54 @@ main {
   }
 }
 
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-left: 140px;
+  padding-right: 140px;
+  margin-top: 50px;
+  margin-bottom: 60px;
+  row-gap: 14px;
+}
+
+.logoBlock {
+  display: flex;
+  flex-direction: column;
+  row-gap: 14px;
+}
+
+.slogan {
+  color: rgb(0, 0, 0);
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 110%;
+  letter-spacing: 0px;
+  text-align: left;
+}
+
+.enterBtn {
+  width: 103px;
+  height: 52px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 26px 16px 26px;
+  border-radius: 46px;
+  background: rgb(188, 236, 48);
+}
+
+.modalContentProfile {
+  background-color: white;
+  border-radius: 30px;
+  box-shadow: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
+  padding: 30px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 .cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, 360px);
@@ -129,4 +177,28 @@ main {
   padding: 1rem 1.625rem; 
   font-size: 1.125rem; 
   line-height: 110%;
+}
+
+.bgReasons {
+  background: linear-gradient(
+    152.61deg,
+    rgb(21, 23, 32) 37.863%,
+    rgb(30, 33, 46) 90.141%
+  );
+}
+
+.path {
+  box-shadow: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
+}
+
+.bgTitle {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.bgLine {
+  background-image: url("../public/line.png");
+  background-size: 670px 391px;
+  background-position: bottom -60px right 30px;
 }

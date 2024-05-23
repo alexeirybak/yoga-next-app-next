@@ -7,6 +7,7 @@ import { store } from "./store";
 import { WorkoutContext } from "./context/workoutContext";
 import { useState } from "react";
 import "./firebase";
+import "./globals.css";
 
 const roboto = Roboto({
   subsets: ["latin"],

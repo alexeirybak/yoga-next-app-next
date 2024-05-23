@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
 import { NewPassword } from "@/app/components/changePassword/ChangePassword";
@@ -12,7 +12,6 @@ import Image from "next/image";
 import { Card } from "@/app/components/card/Card";
 import Link from "next/link";
 import { useAuth } from "@/app/hooks/use-auth";
-import styles from "./../../../components/header/Header.module.css";
 
 type CardData = {
   _id: string;
@@ -29,12 +28,6 @@ const UserProfile: React.FC = () => {
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [subscriptions, setSubscriptions] = useState<CardData[]>([]);
   const router = useRouter();
-
-  const handleCourseDeleted = useCallback((courseId: string) => {
-    setSubscriptions((prevSubscriptions) =>
-      prevSubscriptions.filter((subscription) => subscription._id !== courseId)
-    );
-  }, []);
 
   useEffect(() => {
     if (!isAuth) {
@@ -77,7 +70,7 @@ const UserProfile: React.FC = () => {
   return (
     <div className="mb-[200px]">
       <h1 className="text-[40px] font-semibold mb-10 leading-110">Профиль</h1>
-      <div className={`${styles.modalContentProfile}`}>
+      <div className='modalContentProfile'>
         <Image
           src="/icon-profile.svg"
           width={197}

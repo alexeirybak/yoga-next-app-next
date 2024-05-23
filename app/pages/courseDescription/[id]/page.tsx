@@ -1,9 +1,7 @@
 import Image from "next/image";
 import { EnterButtonFromCourses } from "@/app/components/enterButtonFromCourses/EnterFromCourses";
 import { getDescriptionByCourse } from "@/app/Api/getDescriptionByCourse";
-import styles from "./CourseDescription.module.css";
 import { Metadata } from "next";
-
 
 type Props = {
   params: {
@@ -52,7 +50,7 @@ export default async function CourseDescription({ params: { id } }: Props) {
   return (
     <div>
       <h1
-        className={`max-w-[1440px] h-[310px] mx-auto pl-[40px] pt-[40px] mb-[60px] rounded-3xl text-6xl text-white ${styles.bgTitle}`}
+        className="max-w-[1440px] h-[310px] mx-auto pl-[40px] pt-[40px] mb-[60px] rounded-3xl text-6xl text-white bgTitle"
         style={{
           backgroundImage: `url(./../../largeImg${courseData._id}.jpg)`,
         }}
@@ -67,7 +65,7 @@ export default async function CourseDescription({ params: { id } }: Props) {
           {courseData?.reasons.map((reason: string, index: number) => (
             <li
               key={index}
-              className={`p-5 rounded-[28px] flex flex-row flex-nowrap gap-x-6 items-center ${styles.bgReasons}`}
+              className="p-5 rounded-[28px] flex flex-row flex-nowrap gap-x-6 items-center bgReasons"
             >
               <p className="text-[75px] text-custom-lime">{index + 1}</p>
               <p>{reason}</p>
@@ -95,10 +93,8 @@ export default async function CourseDescription({ params: { id } }: Props) {
           ))}
         </div>
       </div>
-      <div className={`relative ${styles.path}`}>
-        <div
-          className={`absolute inset-0 ${styles.bgLine} bg-no-repeat bg-center bg-contain transform -rotate-9}`}
-        ></div>
+      <div className="relative path">
+        <div className="absolute inset-0 bgLine bg-no-repeat bg-center bg-contain transform -rotate-9"></div>
         <div className="relative p-10 rounded-[30px] flex flex-row justify-between">
           <div className="max-w-[437px] flex flex-col justify-between gap-y-[30px]">
             <div>
