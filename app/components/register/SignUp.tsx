@@ -171,8 +171,8 @@ export const Register: React.FC<RegisterProps> = ({
               style={{ color: passEqual ? "green" : "#db0030" }}
               className="inputSign"            />
           </div>
-          <div className="h-[45px] my-2 text-sm">
-            {error && <div className="text-[#db0030] text-center">{error}</div>}
+          <div className="min-h-[30px] my-2 text-sm">
+            {error && <p className="text-[#db0030] text-center leading-110">{error}</p>}
 
             {!passEqual && (
               <div className="text-[#db0030] text-center">

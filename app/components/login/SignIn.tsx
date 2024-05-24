@@ -7,6 +7,7 @@ import { setUser } from "../../store/slices/userSlice";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { validateEmail, validatePassword } from "@/app/services/validation";
 import { openModal, closeModal } from "@/app/store/slices/modalSlice";
+import Link from "next/link";
 
 type LoginProps = {
   handleClose: () => void;
@@ -21,6 +22,7 @@ export const Login: React.FC<LoginProps> = ({
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isEntering, setIsEntering] = useState(false);
+  const [errorPass, setErrorPass] = useState("");
   const dispatch = useDispatch();
   const auth = getAuth();
 
@@ -98,12 +100,12 @@ export const Login: React.FC<LoginProps> = ({
         "code" in error &&
         "message" in error
       ) {
-        if (
-          error.code === "auth/wrong-password" ||
-          error.code === "auth/user-not-found" ||
-          error.code === "auth/invalid-credential"
-        ) {
-          setError("Неправильная авторизация");
+        if (error.code === "auth/invalid-credential") {
+          setErrorPass("Пароль введен неверно, попробуйте еще раз.");
+        } else if (error.code === "auth/too-many-requests") {
+          setError(
+            "Доступ к этому аккаунту временно заблокирован из-за множества неудачных попыток входа. Пожалуйста, попробуйте позже."
+          );
         } else {
           setError(String(error.message));
         }
@@ -112,6 +114,10 @@ export const Login: React.FC<LoginProps> = ({
       }
       setIsEntering(false);
     }
+  };
+
+  const handleToResetPage = async () => {
+    handleClose();
   };
 
   return (
@@ -132,24 +138,34 @@ export const Login: React.FC<LoginProps> = ({
             className="mx-auto"
           />
 
-          <div className="flex flex-col gap-y-2.5 mt-12 mb-[34px]">
-            <div className="h-[30px]">
-              {error && (
-                <div className="text-[#db0030] text-center">{error}</div>
-              )}
-            </div>
+          <div className="flex flex-col gap-y-2.5 mt-12 mb-2.5">
             <input
               type="email"
               placeholder="Логин"
               value={email}
               onChange={handleEmail}
-              className="inputSign"            />
+              className="outline-none w-full rounded-lg h-[52px] border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] text-lg leading-110"
+            />
             <input
               type="password"
               placeholder="Пароль"
               value={password}
               onChange={handlePassword}
-              className="inputSign"            />
+              className="outline-none w-full rounded-lg h-[52px] border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] text-lg leading-110"
+            />
+          </div>
+          <div className="mb-2 min-h-[40px] text-sm text-[#db0030] leading-110 text-center">
+            {error && <p className="text-center">{error}</p>}
+            {errorPass && (
+              <>
+                {errorPass}{" "}
+                <button onClick={handleToResetPage}>
+                  <Link href="pages/resetPassword" className="underline">
+                    Восстановить пароль?
+                  </Link>
+                </button>
+              </>
+            )}
           </div>
           <div className="flex flex-col gap-y-2.5">
             <button

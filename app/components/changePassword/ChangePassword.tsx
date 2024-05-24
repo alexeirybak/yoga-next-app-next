@@ -102,7 +102,7 @@ export const NewPassword: React.FC<NewPasswordProps> = ({
           <div className="flex flex-col gap-y-2.5 mt-12 mb-[34px]">
             <div className="h-[40px]">
               {error && (
-                <div className="text-[#db0030] text-center">{error}</div>
+                <p className="text-[#db0030] text-center">{error}</p>
               )}
             </div>
             <input
