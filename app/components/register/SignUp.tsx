@@ -134,7 +134,7 @@ export const Register: React.FC<RegisterProps> = ({
       <div className="modalContent w-[360px]">
         <div className="relative">
           <button
-            className="text-2xl w-5 absolute right-0"
+            className="text-2xl pl-2.5 w-5 absolute right-0"
             onClick={handleClose}
           >
             &#10060;

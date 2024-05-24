@@ -23,7 +23,7 @@ export const ProgressSave: React.FC<ProgressModalProps> = ({
     <div className="modalOverlay">
       <div className="modalContentProgress w-[426px] h-[596px]">
         <div className="relative">
-          <button className="text-2xl w-5 absolute right-0" onClick={onClose}>
+          <button className="text-2xl w-5 pl-2.5 absolute right-0" onClick={onClose}>
             &#10060;
           </button>
           <h2 className="text-[32px] mb-12">Мой прогресс</h2>

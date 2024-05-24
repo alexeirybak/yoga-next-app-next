@@ -86,7 +86,7 @@ export const NewPassword: React.FC<NewPasswordProps> = ({
       <div className="modalContent">
         <div className="relative">
           <button
-            className="text-2xl w-5 absolute right-0"
+            className="text-2xl w-5 pl-2.5 absolute right-0"
             onClick={() => setShowChangePasswordForm(false)}
           >
             &#10060;

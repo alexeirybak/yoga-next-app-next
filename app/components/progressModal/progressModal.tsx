@@ -65,7 +65,7 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
       <div className="modalContentProgress w-[460px]">
         <div className="relative">
           <button
-            className="text-2xl w-5 absolute right-0"
+            className="text-2xl w-5 pl-2.5 absolute right-0"
             onClick={handleProgress}
           >
             &#10060;

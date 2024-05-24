@@ -36,7 +36,7 @@ export const TopMenu: React.FC<TopMenuProps> = ({
   };
 
   return (
-    <div className="modalContent absolute right-0 w-[266px] bg-white top-[45px] p-10 rounded-[30px] z-10 mx-auto flex flex-col aligng-center text-center text-lg">
+    <div className="modalContent absolute right-0 w-[266px] bg-white top-[45px] p-10 rounded-[30px] z-10 mx-auto flex flex-col align-center text-center text-lg">
       <p>Имя</p>
       <p className="mb-[34px] text-[#999]">{userEmail}</p>
       <div className="flex flex-col">

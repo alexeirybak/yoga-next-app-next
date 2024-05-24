@@ -125,7 +125,7 @@ export const Login: React.FC<LoginProps> = ({
       <div className="modalContent w-[360px]">
         <div className="relative">
           <button
-            className="text-2xl w-5 absolute right-0"
+            className="text-2xl w-5 absolute pl-2.5 right-0"
             onClick={handleClose}
           >
             &#10060;
@@ -137,7 +137,6 @@ export const Login: React.FC<LoginProps> = ({
             height={35}
             className="mx-auto"
           />
-
           <div className="flex flex-col gap-y-2.5 mt-12 mb-2.5">
             <input
               type="email"

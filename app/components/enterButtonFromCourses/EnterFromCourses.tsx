@@ -20,7 +20,12 @@ export const EnterButtonFromCourses = ({ courseId, courseName }: Props) => {
     event: React.MouseEvent<HTMLButtonElement>
   ) => {
     if (isAuth) {
-      const cardData: CardData = { _id: courseId, name: courseName };
+      const cardData: CardData = {
+        _id: courseId, name: courseName,
+        title: "",
+        description: "",
+        imageUrl: ""
+      };
       await handleSubscribe(event, cardData);
       dispatch(openModal("Вы успешно подписались"));
       setTimeout(() => {

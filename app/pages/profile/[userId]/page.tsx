@@ -12,6 +12,7 @@ import Image from "next/image";
 import { Card } from "@/app/components/card/Card";
 import Link from "next/link";
 import { useAuth } from "@/app/hooks/use-auth";
+import QRCode from "qrcode.react";
 
 type CardData = {
   _id: string;
@@ -21,7 +22,7 @@ type CardData = {
   imageUrl: string;
 };
 
-const UserProfile: React.FC = () => {
+export const UserProfile: React.FC = () => {
   const dispatch = useDispatch();
   const { isAuth } = useAuth();
   const user = useSelector((state: RootState) => state.user);
@@ -70,19 +71,24 @@ const UserProfile: React.FC = () => {
   return (
     <div className="mb-[200px]">
       <h1 className="text-[40px] font-semibold mb-10 leading-110">Профиль</h1>
-      <div className='modalContentProfile'>
-        <Image
-          src="/icon-profile.svg"
-          width={197}
-          height={197}
-          alt="Аватар профиль"
-          className="pr-[33px]"
-        />
+      <div className="modalContentProfile">
+        <div className='rounded-full'>
+          {user && user.email && (
+            <QRCode
+              value={user.email}
+              size={197}
+              bgColor="#FFFFFF"
+              fgColor="#22c55e"
+              className="mr-[33px]"
+            />
+          )}
+        </div>
+
         <div className="flex flex-col text-lg leading-110 gap-y-[30px]">
           <div className="text-[32px] font-medium">Имя</div>
           <div className="flex flex-col gap-y-2.5">
             {user ? `Почта: ${user.email}` : ""}
-            <p>Профиль: *...*</p>
+            <p>Пароль: *...*</p>
           </div>
           <div className="flex flex-row gap-x-2.5">
             <button
@@ -126,11 +132,7 @@ const UserProfile: React.FC = () => {
       </h2>
       <div className={`flex flex-wrap justify-left gap-10 mx-auto cards`}>
         {subscriptions.map((cardData) => (
-          <Card
-            key={cardData._id}
-            cardData={cardData}
-            isSubscribed={true}
-          />
+          <Card key={cardData._id} cardData={cardData} isSubscribed={true} />
         ))}
       </div>
 
@@ -140,5 +142,3 @@ const UserProfile: React.FC = () => {
     </div>
   );
 };
-
-export default UserProfile;
