@@ -21,13 +21,13 @@ export default async function Home() {
   const courses: CardData[] = await getCoursesData();
 
   return (
-    <div className="max-w-[1440px] mx-auto">
+    <div className="max-w-[1440px] px-[16px] md:px-[140px]">
       <div className="flex flex-row justify-between gap-x-5">
-        <div className="text-5xl font-bold max-w-[860px] mb-[50px]">
+        <div className="text-[32px] md:text-5xl font-bold max-w-[860px] mb-[34px] md:mb-[50px] leading-110">
           Начните заниматься спортом и улучшите качество своей жизни
         </div>
         <div className="relative ">
-          <div className="hidden lg:block bg-custom-lime px-5 py-4 text-3xl w-[288px]">
+          <div className="hidden lg:block bg-custom-lime px-5 py-4 md:text-3xl w-[288px]">
             Измени свое тело за полгода!
           </div>
           <Image
@@ -41,7 +41,7 @@ export default async function Home() {
       </div>
 
       <div>
-        <div className="flex flex-wrap gap-y-10 justify-between mx-auto cards">
+        <div className="flex flex-wrap gap-10 justify-center lg:justify-between mx-auto cards">
           {courses.map((cardData: CardData) => (
             <Card key={cardData._id} cardData={cardData} isSubscribed={false} />
           ))}

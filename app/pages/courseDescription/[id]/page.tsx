@@ -48,9 +48,9 @@ export default async function CourseDescription({ params: { id } }: Props) {
   }
 
   return (
-    <div>
+    <div className="max-w-[1440px] px-[16px] md:px-[140px]">
       <h1
-        className="max-w-[1440px] h-[310px] mx-auto pl-[40px] pt-[40px] mb-[60px] rounded-3xl text-6xl text-white bgTitle"
+        className="h-[310px] mx-auto pl-[40px] pt-[40px] mb-[60px] rounded-3xl text-6xl text-white bgTitle"
         style={{
           backgroundImage: `url(./../../largeImg${courseData._id}.jpg)`,
         }}
@@ -61,13 +61,13 @@ export default async function CourseDescription({ params: { id } }: Props) {
         <p className="text-[40px] font-semibold  text-left mb-[40px] leading-110">
           Подойдет для вас, если:
         </p>
-        <ul className="flex flex-row flex-nowrap gap-[17px] text-2xl text-white mb-[60px]">
+        <ul className="flex flex-row flex-wrap gap-[17px] text-2xl text-white mb-[60px]">
           {courseData?.reasons.map((reason: string, index: number) => (
             <li
               key={index}
-              className="p-5 rounded-[28px] flex flex-row flex-nowrap gap-x-6 items-center bgReasons"
+              className="px-[20px] rounded-[28px] flex flex-row flex-nowrap gap-x-6 items-center bgReasons"
             >
-              <p className="text-[75px] text-custom-lime">{index + 1}</p>
+              <p className="py-[20px] text-[75px] text-custom-lime">{index + 1}</p>
               <p>{reason}</p>
             </li>
           ))}

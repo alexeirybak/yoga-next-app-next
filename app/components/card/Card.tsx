@@ -151,7 +151,7 @@ export const Card: React.FC<CardProps> = ({ cardData, isSubscribed }) => {
         )}
 
         <div className="flex flex-col mx-auto px-[30px]">
-          <div className="text-3xl mb-5">{cardData.name}</div>
+          <div className="text-2xl md:text-[32px] mb-5">{cardData.name}</div>
           <CourseInfo />
           {isProfilePage && courseId !== null && (
             <ProgressCard

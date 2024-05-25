@@ -4,15 +4,22 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/app/store";
 import { NewPassword } from "@/app/components/changePassword/ChangePassword";
-import { removeUser } from "@/app/store/slices/userSlice";
+import { removeUser, setUser } from "@/app/store/slices/userSlice";
 import { useRouter } from "next/navigation";
 import { getSubscribedCourses } from "@/app/Api/getSubscribedCourses";
-import { getAuth, signOut } from "firebase/auth";
+import {
+  getAuth,
+  signOut,
+  updateProfile,
+  onAuthStateChanged,
+} from "firebase/auth";
 import Image from "next/image";
 import { Card } from "@/app/components/card/Card";
 import Link from "next/link";
 import { useAuth } from "@/app/hooks/use-auth";
 import QRCode from "qrcode.react";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
+import { openModal, closeModal } from "@/app/store/slices/modalSlice";
 
 type CardData = {
   _id: string;
@@ -22,19 +29,70 @@ type CardData = {
   imageUrl: string;
 };
 
-export const UserProfile: React.FC = () => {
+const UserProfile: React.FC = () => {
   const dispatch = useDispatch();
   const { isAuth } = useAuth();
   const user = useSelector((state: RootState) => state.user);
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [subscriptions, setSubscriptions] = useState<CardData[]>([]);
+  const [username, setUsername] = useState(user.username || "");
+  const [changeName, setChangeName] = useState(false);
   const router = useRouter();
 
+  const handleOpenSaver = () => {
+    setChangeName(!changeName);
+  };
+
   useEffect(() => {
-    if (!isAuth) {
-      router.push("/");
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUsername(user.displayName || "");
+      } else {
+        setUsername("");
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  const handleSaveUsername = async () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      try {
+        await updateProfile(user, { displayName: username });
+        const db = getFirestore();
+        const userDocRef = doc(db, "users", user.uid);
+        await setDoc(
+          userDocRef,
+          {
+            displayName: username,
+          },
+          { merge: true }
+        );
+        dispatch(setUser({
+          email: user.email,
+          token: await user.getIdToken(),
+          id: user.uid,
+          username: username, 
+        }));
+        dispatch(openModal("Имя успешно изменено"));
+        setTimeout(() => {
+          dispatch(closeModal());
+        }, 1500);
+        setChangeName(false);
+      } catch (error) {
+        console.error("Ошибка при сохранении имени пользователя:", error);
+      }
     }
-  }, [isAuth, router]);
+  };
+
+  // useEffect(() => {
+  //   if (!isAuth) {
+  //     router.push("/");
+  //   }
+  // }, [isAuth, router]);
 
   useEffect(() => {
     const fetchSubscribedCourses = async () => {
@@ -72,7 +130,7 @@ export const UserProfile: React.FC = () => {
     <div className="mb-[200px]">
       <h1 className="text-[40px] font-semibold mb-10 leading-110">Профиль</h1>
       <div className="modalContentProfile">
-        <div className='rounded-full'>
+        <div className="rounded-full">
           {user && user.email && (
             <QRCode
               value={user.email}
@@ -85,7 +143,43 @@ export const UserProfile: React.FC = () => {
         </div>
 
         <div className="flex flex-col text-lg leading-110 gap-y-[30px]">
-          <div className="text-[32px] font-medium">Имя</div>
+          <div className="text-[32px] font-medium">{username || "Имя"}</div>
+
+          {changeName && (
+            <>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Введите имя"
+                className="outline-none w-full rounded-lg border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] text-lg leading-110"
+              />
+              <div className="flex flex-row gap-x-4">
+                <button
+                  className="btnGreen py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
+                  onClick={handleSaveUsername}
+                >
+                  Сохранить имя
+                </button>
+                <button
+                  className="btnGray py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
+                  onClick={handleOpenSaver}
+                >
+                  Отмена
+                </button>
+              </div>
+            </>
+          )}
+
+          {!changeName && (
+            <button
+              className="btnGreen py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
+              onClick={handleOpenSaver}
+            >
+              Изменение имени
+            </button>
+          )}
+
           <div className="flex flex-col gap-y-2.5">
             {user ? `Почта: ${user.email}` : ""}
             <p>Пароль: *...*</p>
@@ -142,3 +236,5 @@ export const UserProfile: React.FC = () => {
     </div>
   );
 };
+
+export default UserProfile;

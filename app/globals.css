@@ -12,8 +12,6 @@ body {
 main {
   padding-left: calc(50% - 720px);
   padding-right: calc(50% - 720px);
-  margin-left: 20px;
-  margin-right: 20px;
   margin-bottom: 81px;
 }
 
@@ -21,6 +19,7 @@ main {
   main {
     padding-left: calc(50% - 512px);
     padding-right: calc(50% - 512px);
+    margin-bottom: 40px;
   }
 }
 
