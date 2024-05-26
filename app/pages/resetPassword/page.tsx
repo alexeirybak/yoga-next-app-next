@@ -62,6 +62,7 @@ export default function ResetPasswordPage() {
             height={35}
             className="mx-auto mb-[48px]"
           />
+          
           {!successMessage && (
             <form
               onSubmit={handleSubmit}
