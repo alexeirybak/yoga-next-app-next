@@ -5,7 +5,7 @@ import { useEffect, useState, useContext, useCallback, useMemo } from "react";
 import { db } from "@/app/firebase";
 import { ref, onValue, update } from "firebase/database";
 import { WorkoutContext } from "@/app/context/workoutContext";
-import { openModal, closeModal } from "@/app/store/slices/modalSlice";
+import { openModal } from "@/app/store/slices/modalSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/app/store";
 import { getWorkoutData } from "@/app/Api/getWorkout";
@@ -109,6 +109,7 @@ export default function Workout() {
         fetchWorkoutData();
       } catch (error) {
         console.error("Ошибка при сохранении прогресса:", error);
+        dispatch(openModal("Ошибка при сохранении прогресса:"));
       }
     }
 

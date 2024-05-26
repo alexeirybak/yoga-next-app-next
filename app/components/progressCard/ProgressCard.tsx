@@ -164,7 +164,7 @@ export const ProgressCard: React.FC<ProgressCardProps> = ({
       </div>
       <button
         onClick={handleProgress}
-        className="md:md:text-[18px] btnGreen py-4 px-[26px] rounded-[46px] w-[300px] h-[52px]"
+        className="btnGreen py-4 px-[26px] rounded-[46px] w-[300px] h-[52px]"
       >
         {buttonText}
       </button>

@@ -17,7 +17,7 @@ export const CourseInfo = () => {
         <div className="leading-110">20-50 мин/день</div>
       </div>
       <div className="flex flex-row justify-start items-center p-[10px] h-[38px] rounded-3xl bg-stone-200 gap-x-11px">
-        <Image src="/icon-graf.svg" width={15} height={15} alt="Время" />
+        <Image src="/icon-graf.svg" width={15} height={15} alt="Сложность" />
         <div className="leading-110">Сложность</div>
       </div>
       

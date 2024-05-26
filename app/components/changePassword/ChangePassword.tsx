@@ -92,7 +92,7 @@ export const NewPassword: React.FC<NewPasswordProps> = ({
             &#10060;
           </button>
           <Image
-            src="/logo.svg"
+            src="/logo.png"
             alt="logo"
             width={220}
             height={35}
@@ -124,7 +124,7 @@ export const NewPassword: React.FC<NewPasswordProps> = ({
             <button
               onClick={handleChangePassword}
               disabled={isChanging}
-              className={`w-full h-[52px] py-4 px-[26px] md:text-[18px] leading-110 rounded-[46px] transition-colors duration-300 ease-in-out ${
+              className={`w-full h-[52px] py-4 px-[26px] text-[16px] md:text-[18px] leading-110 rounded-[46px] transition-colors duration-300 ease-in-out ${
                 isChanging
                   ? "bg-white text-[#999] border-[1px] border-[#999]"
                   : "btnGreen"

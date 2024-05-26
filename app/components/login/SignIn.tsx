@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/userSlice";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { validateEmail, validatePassword } from "@/app/services/validation";
-import { openModal, closeModal } from "@/app/store/slices/modalSlice";
+import { openModal } from "@/app/store/slices/modalSlice";
 import Link from "next/link";
 
 type LoginProps = {
@@ -127,7 +127,7 @@ export const Login: React.FC<LoginProps> = ({
             &#10060;
           </button>
           <Image
-            src="/logo.svg"
+            src="/logo.png"
             alt="logo"
             width={220}
             height={35}
@@ -176,7 +176,7 @@ export const Login: React.FC<LoginProps> = ({
             </button>
             <button
               onClick={handleRegisterClick}
-              className="w-full rounded-[46px] h-[52px] btnGray"
+              className="w-full rounded-[46px] md:text-[18px] h-[52px] btnGray"
             >
               Зарегистрироваться
             </button>

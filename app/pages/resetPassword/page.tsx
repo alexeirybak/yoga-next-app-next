@@ -56,7 +56,7 @@ export default function ResetPasswordPage() {
         <div className="modalContentProgress w-[460px]">
           <div className="relative"></div>
           <Image
-            src="/logo.svg"
+            src="/logo.png"
             alt="logo"
             width={220}
             height={35}
@@ -71,10 +71,10 @@ export default function ResetPasswordPage() {
                 name="email"
                 value={email}
                 onChange={handleEmail}
-                placeholder="Логин"
+                placeholder="Введите почту"
                 className="outline-none w-full rounded-lg border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] text-[18px] leading-110"
               />
-              <button className="btnGreen rounded-[30px] px-[26px] py-4 my-5 text-center my-2.5 btnGreen">
+              <button className="btnGreen rounded-[30px] px-[26px] py-4 my-5 text-center my-2.5">
                 Сбросить пароль
               </button>
             </form>

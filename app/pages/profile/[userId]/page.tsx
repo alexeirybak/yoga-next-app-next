@@ -19,7 +19,7 @@ import Link from "next/link";
 import { useAuth } from "@/app/hooks/use-auth";
 import QRCode from "qrcode.react";
 import { doc, setDoc, getFirestore } from "firebase/firestore";
-import { openModal, closeModal } from "@/app/store/slices/modalSlice";
+import { openModal } from "@/app/store/slices/modalSlice";
 import ScrollToTopButton from "@/app/components/ScrollToTopButton";
 
 type CardData = {
@@ -36,12 +36,13 @@ const UserProfile: React.FC = () => {
   const user = useSelector((state: RootState) => state.user);
   const [showChangePasswordForm, setShowChangePasswordForm] = useState(false);
   const [subscriptions, setSubscriptions] = useState<CardData[]>([]);
-  const [username, setUsername] = useState(user.username || "");
+  const [username, setUsername] = useState("");
   const [changeName, setChangeName] = useState(false);
   const router = useRouter();
 
   const handleOpenSaver = () => {
     setChangeName(!changeName);
+    setUsername("");
   };
 
   useEffect(() => {
@@ -84,15 +85,16 @@ const UserProfile: React.FC = () => {
         setChangeName(false);
       } catch (error) {
         console.error("Ошибка при сохранении имени пользователя:", error);
+        dispatch(openModal("Ошибка при сохранении имени пользователя"));
       }
     }
   };
 
-  // useEffect(() => {
-  //   if (!isAuth) {
-  //     router.push("/");
-  //   }
-  // }, [isAuth, router]);
+  useEffect(() => {
+    if (!isAuth) {
+      router.push("/");
+    }
+  }, [isAuth, router]);
 
   useEffect(() => {
     const fetchSubscribedCourses = async () => {
@@ -146,7 +148,7 @@ const UserProfile: React.FC = () => {
 
         <div className="flex flex-col leading-110 gap-[30px]">
           <div className="text-[24px] md:text-[32px] font-medium">
-            {username || "Имя"}
+            {user.username || "Имя"}
           </div>
 
           {changeName && (
@@ -160,13 +162,13 @@ const UserProfile: React.FC = () => {
               />
               <div className="flex flex-col md:flex-row gap-2.5 items-center">
                 <button
-                  className="md:text-[18px] btnGreen py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
+                  className="btnGreen py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
                   onClick={handleSaveUsername}
                 >
                   Сохранить имя
                 </button>
                 <button
-                  className="md:text-[18px] btnGray py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
+                  className="btnGray py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
                   onClick={handleOpenSaver}
                 >
                   Отмена
@@ -177,7 +179,7 @@ const UserProfile: React.FC = () => {
 
           {!changeName && (
             <button
-              className="md:text-[18px] btnGreen py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
+              className="btnGreen py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
               onClick={handleOpenSaver}
             >
               Изменение имени
@@ -191,13 +193,13 @@ const UserProfile: React.FC = () => {
           <div className="flex flex-col md:flex-row gap-2.5 items-center">
             <button
               onClick={() => setShowChangePasswordForm(true)}
-              className="md:text-[18px] btnGreen py-4 px-[26px] rounded-[46px] w-[210px] h-[52px] leading-110"
+              className="btnGreen py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
             >
               Изменить пароль
             </button>
             <button
               onClick={handleLogout}
-              className="md:text-[18px] btnGray py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
+              className="btnGray py-4 px-[26px] rounded-[46px] w-[210px] h-[52px]"
             >
               Выйти
             </button>
@@ -229,7 +231,7 @@ const UserProfile: React.FC = () => {
         )}
       </h2>
       <div
-        className={`flex flex-wrap justify-center gap-6 md:gap-10 mx-auto cards`}
+        className="cards"
       >
         {subscriptions.map((cardData) => (
           <Card key={cardData._id} cardData={cardData} isSubscribed={true} />

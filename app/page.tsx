@@ -40,7 +40,7 @@ export default async function Home() {
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-y-10 gap-x-2 justify-center lg:justify-between mx-auto cards">
+      <div className="cards">
         {courses.map((cardData: CardData) => (
           <Card key={cardData._id} cardData={cardData} isSubscribed={false} />
         ))}

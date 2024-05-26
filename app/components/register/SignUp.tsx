@@ -4,9 +4,9 @@ import Image from "next/image";
 import { MouseEventHandler, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../../store/slices/userSlice";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { validateEmail, validatePassword } from "@/app/services/validation";
-import { openModal, closeModal } from "@/app/store/slices/modalSlice";
+import { openModal } from "@/app/store/slices/modalSlice";
 
 type RegisterProps = {
   handleClose: () => void;
@@ -65,7 +65,7 @@ export const Register: React.FC<RegisterProps> = ({
     setPassword(trimmedPassword);
     setRepeatPassword(trimmedRepeatPassword);
     setIsRegistering(true);
-    createUser(event);
+    await createUser(event);
   };
 
   const handleEmail = (event: { target: { value: string } }) => {
@@ -111,6 +111,8 @@ export const Register: React.FC<RegisterProps> = ({
           token: idToken,
         })
       );
+      await signInWithEmailAndPassword(auth, email, password);
+
       handleClose();
       setIsRegistering(false);
       dispatch(openModal("Вы успешно зарегистрировались"));
@@ -136,7 +138,7 @@ export const Register: React.FC<RegisterProps> = ({
             &#10060;
           </button>
           <Image
-            src="/logo.svg"
+            src="/logo.png"
             alt="logo"
             width={220}
             height={35}
