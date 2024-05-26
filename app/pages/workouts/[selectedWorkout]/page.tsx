@@ -114,9 +114,6 @@ export default function Workout() {
 
     setProgressModal(false);
     dispatch(openModal("Ваш прогресс засчитан"));
-    setTimeout(() => {
-      dispatch(closeModal());
-    }, 1500);
   };
 
   const calculateProgressPercentage = (made: number, quantity: number) => {
@@ -140,28 +137,28 @@ export default function Workout() {
 
   return (
     <>
-      <div>
-        <h1 className="font-medium text-6xl mb-6">{courseByWorkout}</h1>
+      <div className="max-w-[1440px] px-[16px] lg:px-[140px]">
+        <h1 className="font-medium text-[24px] md:text-6xl mb-2.5 md:mb-6">{courseByWorkout}</h1>
         {workoutData.details && (
-          <p className="text-[32px] mb-10">{workoutData.details}</p>
+          <p className="text-[18px] md:text-[32px] mb-6 md:mb-10">{workoutData.details}</p>
         )}
         {workoutData.video && (
-          <div className="mb-10 ">
+          <div className="mb-6 md:mb-10 flex justify-center">
             <iframe
               src={workoutData.video}
               title="YouTube video player"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-              className="w-[1160px] h-[639px] rounded-[30px]"
+              className="screen rounded-[9px] md:rounded-[30px]"
             ></iframe>
           </div>
         )}
-        <div className="w-full max-w-[1160px] p-10 bg-white modalContentProgress">
+        <div className="w-full max-w-[1160px] bg-white modalContentProgress flex flex-col md:block">
           <h2 className="text-[32px] leading-110 mb-5">
             Упражнения тренировки “{workoutData.name}”
           </h2>
           {workoutData && (
-            <ul className="flex flex-row flex-wrap gap-y-5 gap-x-[60px] mb-10">
+            <ul className="flex flex-row flex-wrap gap-y-5 gap-x-[60px] mb-10 text-[18px] justify-center md:justify-between">
               {workoutData.exercises.map((exItem: Exercise, index: number) => {
                 const userProgress = workoutData[userId]?.progress;
                 const progressItem = userProgress?.exercises[index];
@@ -174,7 +171,7 @@ export default function Workout() {
                     <div className="">
                       {exItem.name} ({exItem.quantity} повторений)
                     </div>
-                    <div className="w-[320px] h-[6px] bg-[#f7f7f7] mt-2.5 relative">
+                    <div className="w-full h-[6px] bg-[#f7f7f7] mt-2.5 relative">
                       <div
                         className="h-[6px] bg-[#00c1ff] rounded-[50px]"
                         style={{
@@ -192,7 +189,7 @@ export default function Workout() {
           )}
           <button
             onClick={() => setProgressModal(true)}
-            className="btnGreen rounded-[46px] px-[26px] py-4"
+            className="btnGreen rounded-[46px] px-[26px] py-4 mx-auto"
           >
             {hasProgress ? "Обновить свой прогресс" : "Заполнить свой прогресс"}
           </button>

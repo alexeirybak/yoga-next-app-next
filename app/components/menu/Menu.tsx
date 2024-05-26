@@ -38,10 +38,10 @@ export const TopMenu: React.FC<TopMenuProps> = ({
   };
 
   return (
-    <div className="modalContent absolute right-0 w-[266px] bg-white top-[45px] p-10 rounded-[30px] z-10 mx-auto flex flex-col align-center text-center text-lg">
-      <p>{userName}</p>
-      <p className="mb-[34px] text-[#999]">{userEmail}</p>
-      <div className="flex flex-col">
+    <div className="modalContent absolute right-0 w-[266px] bg-white top-[45px] p-10 rounded-[30px] z-10 mx-auto flex flex-col align-center text-center md:text-[18px]">
+      <p className="text-[18px]">{userName}</p>
+      <p className="mb-[34px] text-[18px] text-[#999]">{userEmail}</p>
+      <div className="text-[18px] flex flex-col">
         <Link
           href={`/pages/profile/${userId}`}
           onClick={() => setIsOpenMenu(false)}

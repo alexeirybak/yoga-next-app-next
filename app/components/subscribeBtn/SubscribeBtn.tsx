@@ -7,7 +7,7 @@ type SubscribeButtonProps = {
 export const SubscribeButton: React.FC<SubscribeButtonProps> = ({ handleSubscribe }) => {
   return (
     <button
-      className="absolute top-[20px] right-[20px] flex items-center justify-center text-lg leading-110 cursor-pointer"
+      className="absolute top-[20px] right-[20px] flex items-center justify-center md:text-[18px] leading-110 cursor-pointer"
       onClick={handleSubscribe}
     >
       <Image

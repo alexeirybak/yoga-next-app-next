@@ -88,11 +88,7 @@ export const Login: React.FC<LoginProps> = ({
       );
       handleClose();
       setIsEntering(false);
-
       dispatch(openModal("Вы успешно вошли"));
-      setTimeout(() => {
-        dispatch(closeModal());
-      }, 1500);
     } catch (error) {
       if (
         typeof error === "object" &&
@@ -122,7 +118,7 @@ export const Login: React.FC<LoginProps> = ({
 
   return (
     <div className="modalOverlay">
-      <div className="modalContent w-[360px]">
+      <div className="modalContent w-[343px] sm:w-[360px]">
         <div className="relative">
           <button
             className="text-2xl w-5 absolute pl-2.5 right-0"
@@ -143,14 +139,14 @@ export const Login: React.FC<LoginProps> = ({
               placeholder="Логин"
               value={email}
               onChange={handleEmail}
-              className="outline-none w-full rounded-lg h-[52px] border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] text-lg leading-110"
+              className="outline-none w-full rounded-lg h-[52px] border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] md:text-[18px] leading-110"
             />
             <input
               type="password"
               placeholder="Пароль"
               value={password}
               onChange={handlePassword}
-              className="outline-none w-full rounded-lg h-[52px] border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] text-lg leading-110"
+              className="outline-none w-full rounded-lg h-[52px] border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] md:text-[18px] leading-110"
             />
           </div>
           <div className="mb-2 min-h-[40px] text-sm text-[#db0030] leading-110 text-center">
@@ -170,7 +166,7 @@ export const Login: React.FC<LoginProps> = ({
             <button
               onClick={handleSignIn}
               disabled={isEntering}
-              className={`w-full h-[52px] py-4 px-[26px] text-lg rounded-[46px] transition-colors duration-300 leading-110 ease-in-out ${
+              className={`w-full h-[52px] py-4 px-[26px] md:text-[18px] rounded-[46px] transition-colors duration-300 leading-110 ease-in-out ${
                 isEntering
                   ? "bg-white text-[#999] border-[1px] border-[#999]"
                   : "btnGreen"

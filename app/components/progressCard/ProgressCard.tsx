@@ -150,7 +150,7 @@ export const ProgressCard: React.FC<ProgressCardProps> = ({
   }
 
   return (
-    <div className="mx-auto bg-white text-lg">
+    <div className="mx-auto bg-white text-[18px]">
       <div className="leading-110 mt-5 mb-2.5">
         Прогресс {calculatePercentage(totalMade, totalQuantity)}%
       </div>
@@ -164,7 +164,7 @@ export const ProgressCard: React.FC<ProgressCardProps> = ({
       </div>
       <button
         onClick={handleProgress}
-        className="btnGreen py-4 px-[26px] rounded-[46px] w-[300px] h-[52px]"
+        className="md:md:text-[18px] btnGreen py-4 px-[26px] rounded-[46px] w-[300px] h-[52px]"
       >
         {buttonText}
       </button>

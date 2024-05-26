@@ -113,11 +113,7 @@ export const Register: React.FC<RegisterProps> = ({
       );
       handleClose();
       setIsRegistering(false);
-
       dispatch(openModal("Вы успешно зарегистрировались"));
-      setTimeout(() => {
-        dispatch(closeModal());
-      }, 1500);
     } catch (error) {
       const typedError = error as Error;
       if (typedError.message.includes("auth/email-already-in-use")) {
@@ -131,7 +127,7 @@ export const Register: React.FC<RegisterProps> = ({
 
   return (
     <div className="modalOverlay">
-      <div className="modalContent w-[360px]">
+      <div className="modalContent w-[343px] sm:w-[360px]">
         <div className="relative">
           <button
             className="text-2xl pl-2.5 w-5 absolute right-0"
@@ -184,7 +180,7 @@ export const Register: React.FC<RegisterProps> = ({
             <button
               onClick={handleSignUp}
               disabled={isRegistering}
-              className={`w-full h-[52px] py-4 px-[26px] text-lg leading-110 rounded-[46px] transition-colors duration-300 ease-in-out ${
+              className={`w-full h-[52px] py-4 px-[26px] md:text-[18px] leading-110 rounded-[46px] transition-colors duration-300 ease-in-out ${
                 isRegistering
                   ? "bg-white text-[#999] border-[1px] border-[#999]"
                   : "btnGreen"

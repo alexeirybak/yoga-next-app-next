@@ -88,9 +88,6 @@ export const Card: React.FC<CardProps> = ({ cardData, isSubscribed }) => {
     }
     await handleSubscribe(event, cardData);
     dispatch(openModal("Вы успешно подписались"));
-    setTimeout(() => {
-      dispatch(closeModal());
-    }, 1500);
   };
 
   const handleUnsubscribeClick = async (
@@ -106,9 +103,6 @@ export const Card: React.FC<CardProps> = ({ cardData, isSubscribed }) => {
       const message = await handleUnsubscribe(unsubscribeEvent, cardData);
       if (message) {
         dispatch(openModal(message));
-        setTimeout(() => {
-          dispatch(closeModal());
-        }, 1500);
       }
     }
     setShowUnsubscribeConfirm(false);
@@ -120,7 +114,7 @@ export const Card: React.FC<CardProps> = ({ cardData, isSubscribed }) => {
 
   return (
     <div
-      className={`flex flex-col relative bg-white rounded-3xl card pb-[15px]`}
+      className="flex flex-col relative bg-white rounded-3xl card pb-[15px] w-[343px] sm:w-[360px]"
     >
       {isSubscribed ? (
         <UnsubscribeButton handleUnsubscribe={handleUnsubscribeClick} />

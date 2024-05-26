@@ -21,8 +21,8 @@ export default async function Home() {
   const courses: CardData[] = await getCoursesData();
 
   return (
-    <div className="max-w-[1440px] px-[16px] md:px-[140px]">
-      <div className="flex flex-row justify-between gap-x-5">
+    <div className="max-w-[1440px] px-[16px] lg:px-[140px]">
+      <div className="flex flex-row justify-center lg:justify-between gap-x-5">
         <div className="text-[32px] md:text-5xl font-bold max-w-[860px] mb-[34px] md:mb-[50px] leading-110">
           Начните заниматься спортом и улучшите качество своей жизни
         </div>
@@ -40,13 +40,12 @@ export default async function Home() {
         </div>
       </div>
 
-      <div>
-        <div className="flex flex-wrap gap-10 justify-center lg:justify-between mx-auto cards">
-          {courses.map((cardData: CardData) => (
-            <Card key={cardData._id} cardData={cardData} isSubscribed={false} />
-          ))}
-        </div>
+      <div className="flex flex-wrap gap-y-10 gap-x-2 justify-center lg:justify-between mx-auto cards">
+        {courses.map((cardData: CardData) => (
+          <Card key={cardData._id} cardData={cardData} isSubscribed={false} />
+        ))}
       </div>
+
       <ScrollToTopButton />
     </div>
   );

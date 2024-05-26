@@ -28,9 +28,6 @@ export const EnterButtonFromCourses = ({ courseId, courseName }: Props) => {
       };
       await handleSubscribe(event, cardData);
       dispatch(openModal("Вы успешно подписались"));
-      setTimeout(() => {
-        dispatch(closeModal());
-      }, 1500);
     } else {
       dispatch(openLogin());
     }

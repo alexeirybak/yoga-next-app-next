@@ -72,7 +72,7 @@ export default function ResetPasswordPage() {
                 value={email}
                 onChange={handleEmail}
                 placeholder="Логин"
-                className="outline-none w-full rounded-lg border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] text-lg leading-110"
+                className="outline-none w-full rounded-lg border-[1px] border-[#D0CECE] rounded-lg py-4 px-[26px] text-[18px] leading-110"
               />
               <button className="btnGreen rounded-[30px] px-[26px] py-4 my-5 text-center my-2.5 btnGreen">
                 Сбросить пароль
@@ -87,7 +87,7 @@ export default function ResetPasswordPage() {
               </p>
             )}
             {successMessage && (
-              <div className="text-lg leading-110 text-center">
+              <div className="text-[18px] leading-110 text-center">
                 {successMessage}
               </div>
             )}

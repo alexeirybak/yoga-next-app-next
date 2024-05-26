@@ -1,5 +1,5 @@
 "use client";
-
+ 
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -20,7 +20,7 @@ import {
 } from "@/app/store/slices/formSlice";
 import { removeUser, setUser } from "@/app/store/slices/userSlice";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
-
+ 
 export const Header: React.FC = () => {
   const dispatch = useDispatch();
   const user = useSelector((state: RootState) => state.user);
@@ -30,11 +30,11 @@ export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const modal = useSelector((state: RootState) => state.modal);
   const pathname = usePathname();
-
+ 
   const shouldHideParagraph =
     pathname.startsWith("/pages/profile/") ||
     pathname.startsWith("/pages/workouts/");
-
+ 
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -45,7 +45,7 @@ export const Header: React.FC = () => {
           const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
             const userData = userDoc.data();
-
+ 
             dispatch(
               setUser({
                 email: user.email,
@@ -68,42 +68,42 @@ export const Header: React.FC = () => {
         dispatch(removeUser());
       }
     });
-
+ 
     return () => unsubscribe();
   }, [dispatch]);
-
+ 
   const handleLoginClick = () => {
     dispatch(openLogin());
   };
-
+ 
   const handleCloseLogin = () => {
     dispatch(closeLogin());
   };
-
+ 
   const handleRegisterClick = () => {
     dispatch(openRegister());
   };
-
+ 
   const handleCloseRegister = () => {
     dispatch(closeRegister());
   };
-
+ 
   useEffect(() => {
     if (modal.isOpen) {
       setTimeout(() => {
         dispatch(closeModal());
-      }, 1500);
+      }, 3000);
     }
   }, [modal.isOpen, dispatch]);
-
+ 
   return (
-    <header className="flex flex-row gap-y-5 justify-between px-[16px] md:px-[140px] mb-[40px] md:mb-[60px] pt-12 mx-auto">
+    <header className="max-w-[1440px] flex flex-row gap-y-5 justify-between align-center px-[16px] lg:px-[140px] mb-[40px] md:mb-[60px] pt-12 mx-auto">
       <div className="flex flex-col gap-y-5">
         <Link href={`/`}>
           <Image src="/logo.svg" alt="logo" width={220} height={35} />
         </Link>
         {!shouldHideParagraph && (
-          <p className="text-black text-base leading-loose text-lg hidden md:block">
+          <p className="text-black text-base leading-loose md:text-[18px] hidden md:block">
             Онлайн-тренировки для занятий дома
           </p>
         )}
@@ -121,7 +121,7 @@ export const Header: React.FC = () => {
               height={41}
               className="mr-5"
             />
-            <div className="flex justify-center text-center text-lg leading-110 hidden md:block">
+            <div className="flex justify-center text-center md:text-[18px] leading-110 hidden md:block">
               {user.username}
             </div>
             <Image
@@ -146,26 +146,27 @@ export const Header: React.FC = () => {
         </div>
       ) : (
         <button
-          className="btnGreen flex flex-row justify-center items-center min-w-32 h-14 rounded-full p-4"
+          className="btnGreen flex flex-row justify-center items-center w-[83px] h-[36px] md:w-[103px] md:h-[52px] rounded-full p-4"
           onClick={handleLoginClick}
         >
           Войти
         </button>
       )}
-
+ 
       {isLoginOpen && (
         <Login
           handleClose={handleCloseLogin}
           handleRegisterClick={handleRegisterClick}
         />
       )}
-
+ 
       {isRegisterOpen && (
         <Register
           handleClose={handleCloseRegister}
           handleLoginClick={handleLoginClick}
         />
       )}
+      {modal.isOpen && <PopUp message={modal.message} />}
       {modal.isOpen && <PopUp message={modal.message} />}
     </header>
   );

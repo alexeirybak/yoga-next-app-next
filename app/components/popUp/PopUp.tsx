@@ -9,12 +9,12 @@ export const PopUp: React.FC<PopUpProps> = ({ message }) => {
     <div className="modalOverlay">
       <div className="modalContent">
         <div className="relative">
-          <p className="w-[343px] text-[32px] mx-auto text-center mb-10">
+          <p className="text-[24px] md:text-[32px] mx-auto text-center mb-10">
             {message}
           </p>
           <Image
             src="/icon-ok.svg"
-            alt="Вы вошли"
+            alt="Сообщение"
             width={57}
             height={57}
             className="mx-auto"

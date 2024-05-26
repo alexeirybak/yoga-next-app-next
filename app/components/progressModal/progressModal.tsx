@@ -62,7 +62,7 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
 
   return (
     <div className="modalOverlay ">
-      <div className="modalContentProgress w-[460px]">
+      <div className="modalContentProgress w-[343px] md:w-[460px]">
         <div className="relative">
           <button
             className="text-2xl w-5 pl-2.5 absolute right-0"
@@ -70,7 +70,7 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
           >
             &#10060;
           </button>
-          <div className="text-[32px] mb-5">Выберите тренировки</div>
+          <div className="text-[32px] mb-5 leading-110">Выберите тренировки</div>
           <ul className="flex flex-col mb-[35px] max-h-[360px] overflow-y-auto listMenuScroll pr-5">
             {workoutNames.map((workout, index) => (
               <li
@@ -115,7 +115,7 @@ export const ProgressModal: React.FC<ProgressModalProps> = ({
             ) : (
               <button
                 disabled
-                className="text-lg border-[#999] border-[1px] text-[#999] py-4 px-[26px] rounded-[46px] w-[283px] h-[52px] leading-110 cursor-not-allowed"
+                className="md:text-[18px] border-[#999] border-[1px] text-[#999] py-4 px-[26px] rounded-[46px] w-[283px] h-[52px] leading-110 cursor-not-allowed"
               >
                 Начать
               </button>

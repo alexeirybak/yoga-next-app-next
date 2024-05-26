@@ -30,7 +30,7 @@ export const ProgressSave: React.FC<ProgressModalProps> = ({
           <ul className="max-h-[347px] overflow-y-auto listMenuScroll pr-5">
             {exercises.map((exercise: Exercise) => (
               <li key={exercise.name}>
-                <div className="text-lg leading-110 mb-2.5">
+                <div className="md:text-[18px] leading-110 mb-2.5">
                   Сколько раз вы сделали “{exercise.name}”?
                 </div>
                 <label htmlFor={exercise.name} />

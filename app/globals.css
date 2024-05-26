@@ -10,15 +10,13 @@ body {
 }
 
 main {
+  margin-bottom: 81px;
   padding-left: calc(50% - 720px);
   padding-right: calc(50% - 720px);
-  margin-bottom: 81px;
 }
 
 @media (max-width: 1024px) {
   main {
-    padding-left: calc(50% - 512px);
-    padding-right: calc(50% - 512px);
     margin-bottom: 40px;
   }
 }
@@ -61,11 +59,6 @@ main {
   background: rgb(188, 236, 48);
 }
 
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, 360px);
-}
-
 .card {
   box-shadow: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
 }
@@ -88,6 +81,13 @@ main {
   border-radius: 30px;
   box-shadow: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
   padding: 40px;
+  width: 360px;
+}
+
+@media (max-width: 375px) {
+  .modalContent {
+    width: 343px;
+  }
 }
 
 .modalContentProgress {
@@ -103,8 +103,8 @@ main {
   box-shadow: 0px 4px 67px -12px rgba(0, 0, 0, 0.13);
   padding: 30px;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
+  flex-direction: column;
+  align-items: center;
 }
 
 .listMenuScroll::-webkit-scrollbar {
@@ -122,7 +122,6 @@ main {
 }
 
 .btnGreen {
-  font-size: 18px;
   color: black;
   text-align: center;
   background-color: #bcec30;
@@ -140,7 +139,6 @@ main {
 }
 
 .btnGray {
-  font-size: 18px;
   color: black;
   text-align: center;
   background-color: white;
@@ -161,10 +159,10 @@ main {
   outline: none;
   width: 100%;
   height: 52px;
-  border: 1px solid #D0CECE;
-  border-radius: 0.5rem; 
-  padding: 1rem 1.625rem; 
-  font-size: 1.125rem; 
+  border: 1px solid #d0cece;
+  border-radius: 0.5rem;
+  padding: 1rem 1.625rem;
+  font-size: 1.125rem;
   line-height: 110%;
 }
 
@@ -183,11 +181,54 @@ main {
 .bgTitle {
   background-size: cover;
   background-repeat: no-repeat;
-  background-position: center;
+  background-position: right;
 }
 
 .bgLine {
   background-image: url("../public/line.png");
-  background-size: 670px 391px;
-  background-position: bottom -60px right 30px;
+  background-position: bottom -60px right -60px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.bgMan {
+  background-image: url("../public/man.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: right 0 bottom 0;
+}
+
+.bgLineTop {
+  background-image: url("../public/line.png");
+  background-position: bottom -30px right -45px;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media (min-width: 1440px) {
+  .screen {
+    width: 1160px;
+    height: 639px;
+  }
+}
+
+@media (max-width: 1439px) {
+  .screen {
+    width: 744px;
+    height: 410px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .screen {
+    width: 488px;
+    height: 269px;
+  }
+}
+
+@media (max-width: 767px) {
+  .screen {
+    width: 343px;
+    height: 189px;
+  }
 }
