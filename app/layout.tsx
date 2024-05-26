@@ -1,28 +1,34 @@
-import type { Metadata } from "next";
+"use client";
+
 import { Roboto } from "next/font/google";
 import { Header } from "./components/header/Header";
+import { Provider } from "react-redux";
+import { store } from "./store";
+import { WorkoutContext } from "./context/workoutContext";
+import { useState } from "react";
+import "./firebase";
 import "./globals.css";
 
 const roboto = Roboto({
   subsets: ["latin"],
-  weight: ["400", "500", "700"] 
+  weight: ["400", "500", "700"],
 });
-
-export const metadata: Metadata = {
-  title: "Фитнес",
-  description: "Как заняться спортом и улучшить качество своей жизни",
-};
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const [courseByWorkout, setCourseByWorkout] = useState("");
   return (
     <html lang="en">
       <body className={roboto.className}>
-        <Header />
-        <main>{children}</main>
+        <Provider store={store}>
+          <Header />
+          <WorkoutContext.Provider value={{ courseByWorkout, setCourseByWorkout }}>
+            <main>{children}</main>
+          </WorkoutContext.Provider>
+        </Provider>
       </body>
     </html>
   );

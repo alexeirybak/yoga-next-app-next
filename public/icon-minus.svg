@@ -1,0 +1,13 @@
+<svg width="32.000000" height="32.000000" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<desc>
+			Created with Pixso.
+	</desc>
+	<defs>
+		<clipPath id="clip33_2077">
+			<rect id="Remove-in-Circle" width="32.000000" height="32.000000" fill="white" fill-opacity="0"/>
+		</clipPath>
+	</defs>
+	<g clip-path="url(#clip33_2077)">
+		<path id="Icon" d="M16 29.33C23.36 29.33 29.33 23.36 29.33 16C29.33 8.63 23.36 2.66 16 2.66C8.63 2.66 2.66 8.63 2.66 16C2.66 23.36 8.63 29.33 16 29.33ZM9.33 14.66L9.33 17.33L22.66 17.33L22.66 14.66L9.33 14.66Z" fill="#FFFFFF" fill-opacity="1.000000" fill-rule="evenodd"/>
+	</g>
+</svg>
