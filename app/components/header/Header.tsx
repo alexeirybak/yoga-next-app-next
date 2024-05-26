@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Login } from "@/app/components/login/SignIn";
 import { Register } from "../register/SignUp";
-import { PopUp } from "../popup/Popup";
+import { Popup } from "../popup/Popup";
 import { TopMenu } from "../menu/Menu";
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -166,8 +166,7 @@ export const Header: React.FC = () => {
           handleLoginClick={handleLoginClick}
         />
       )}
-      {modal.isOpen && <PopUp message={modal.message} />}
-      {modal.isOpen && <PopUp message={modal.message} />}
+      {modal.isOpen && <Popup message={modal.message} />}
     </header>
   );
 };

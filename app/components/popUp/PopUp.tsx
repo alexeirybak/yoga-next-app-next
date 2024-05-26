@@ -4,7 +4,7 @@ type PopUpProps = {
   message: string;
 };
 
-export const PopUp: React.FC<PopUpProps> = ({ message }) => {
+export const Popup: React.FC<PopUpProps> = ({ message }) => {
   return (
     <div className="modalOverlay">
       <div className="modalContent">
